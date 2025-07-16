@@ -1130,7 +1130,21 @@ a:hover {
   .platform-grid {
     grid-template-columns: 1fr;
   }
-  
+
+  .platforms-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+    margin-top: var(--space-xl);
+  }
+
+  .platform-category {
+    padding: var(--space-xl);
+  }
+
+  .category-title {
+    font-size: var(--font-size-lg);
+  }
+
   .about-stats {
     grid-template-columns: 1fr;
     gap: var(--space-lg);
@@ -1522,3 +1536,65 @@ a:hover {
   color: var(--color-text-secondary);
   margin-top: var(--space-lg);
 } 
+
+/* ===== PLATFORM CATEGORIES LAYOUT ===== */
+.platforms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-3xl);
+  margin-top: var(--space-2xl);
+}
+
+.platform-category {
+  background: var(--color-bg-glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-2xl);
+  backdrop-filter: var(--glass-backdrop);
+  transition: var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.platform-category::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--color-gradient-1);
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+}
+
+.platform-category:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--color-primary);
+}
+
+.category-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-md);
+  font-family: var(--font-display);
+}
+
+.category-description {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-xl);
+  line-height: 1.6;
+}
+
+.platform-category .platform-grid {
+  margin-top: 0;
+}
+
+.platform-category .platform-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+/* ===== PLATFORM BUTTONS ===== */ 
