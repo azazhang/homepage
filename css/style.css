@@ -366,12 +366,12 @@ a:hover {
 }
 
 .hero-avatar {
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-2xl);
 }
 
 .hero-avatar-image {
-  width: 160px;
-  height: 160px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   object-fit: cover;
   border: 4px solid rgba(255, 255, 255, 0.3);
@@ -383,14 +383,6 @@ a:hover {
   transform: scale(1.05);
   border-color: rgba(255, 255, 255, 0.6);
   box-shadow: var(--shadow-glow-lg);
-}
-
-.hero-title {
-  font-size: var(--font-size-6xl);
-  font-weight: 800;
-  margin-bottom: var(--space-lg);
-  font-family: var(--font-display);
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .hero-subtitle {
@@ -971,6 +963,7 @@ a:hover {
   color: white;
   position: relative;
   overflow: hidden;
+  margin-top: var(--space-4xl);
 }
 
 .footer::before {
@@ -1084,8 +1077,8 @@ a:hover {
   }
 
   .hero-avatar-image {
-    width: 120px;
-    height: 120px;
+    width: 150px;
+    height: 150px;
   }
 
   .hero-title {
@@ -1125,6 +1118,10 @@ a:hover {
 
   .category-title {
     font-size: var(--font-size-lg);
+  }
+
+  .footer {
+    margin-top: var(--space-3xl);
   }
 
   .about-stats {
