@@ -578,12 +578,7 @@ a:hover {
   font-weight: 600;
 }
 
-.release-type {
-  background: var(--color-gradient-3);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
+
 
 .release-badge {
   background: var(--color-gradient-2);
@@ -1392,7 +1387,7 @@ a:hover {
   justify-content: center;
 }
 
-.release-type, .release-year, .release-genre {
+.release-year, .release-genre {
   padding: var(--space-xs) var(--space-sm);
   background: var(--color-gradient-3);
   color: white;
@@ -1447,12 +1442,9 @@ a:hover {
 }
 
 .release-type {
-  background: var(--color-primary);
-  color: white;
-  padding: var(--space-xs) var(--space-sm);
-  border-radius: var(--radius-sm);
+  color: var(--color-primary);
   font-weight: 600;
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
 }
 
 .release-date {
