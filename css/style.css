@@ -141,7 +141,6 @@ body {
   pointer-events: none;
   opacity: 0.16;
   mix-blend-mode: multiply;
-  animation: float 25s ease-in-out infinite alternate;
 }
 
 .glow-1 {
