@@ -5,7 +5,7 @@
   --color-bg-primary: #FAF9F6;   /* Alabaster Cream */
   --color-bg-secondary: #F4F3EF; /* Warm clay / light gray */
   --color-bg-accent: #EBEAE4;    /* Tech gray */
-  --color-bg-glass: rgba(255, 255, 255, 0.93);
+  --color-bg-glass: rgba(255, 255, 255, 0.45);
   --color-border-glass: rgba(255, 255, 255, 0.65);
   
   /* Glowing Neon Lights (Softened for Light Theme) */
@@ -249,6 +249,8 @@ a {
   border: 1px solid var(--color-border-glass);
   border-radius: var(--radius-2xl);
   box-shadow: var(--shadow-md);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   transition: transform var(--transition-slow), box-shadow var(--transition-base), border-color var(--transition-base);
 }
 
@@ -260,6 +262,8 @@ a {
   background: var(--color-bg-glass);
   border: 1px solid var(--color-border-glass);
   border-radius: var(--radius-2xl);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   box-shadow: var(--shadow-sm);
   transition: transform var(--transition-slow), border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
@@ -1401,7 +1405,9 @@ a {
   left: 20px;
   right: 20px;
   padding: var(--space-md) var(--space-lg);
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--color-border-glass);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
@@ -1644,6 +1650,8 @@ a {
   background: var(--color-bg-glass);
   border: 1px solid var(--color-border-glass);
   box-shadow: var(--shadow-md);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .contact-form {
@@ -1809,7 +1817,9 @@ select.form-input {
 
 /* ===== FOOTER LAYOUT ===== */
 .footer {
-  background: rgba(244, 243, 239, 0.94);
+  background: rgba(244, 243, 239, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-top: 1px solid var(--color-bg-accent);
   padding: var(--space-3xl) 0 var(--space-xl);
 }
