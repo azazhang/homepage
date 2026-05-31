@@ -170,16 +170,16 @@ function initBackgroundCanvas() {
     const knobSpeedVal = parseFloat(style.getPropertyValue('--visualizer-speed') || '1.0');
     const knobCompressVal = parseFloat(style.getPropertyValue('--compressor-val') || '0.6');
 
-    state.colorAlpha = 0.03 + (knobGlowVal * 0.08); // knob glow changes line opacity
-    state.speedScale = 0.4 + (knobSpeedVal * 1.5);   // knob speed changes wave frequency
-    state.amplitudeScale = 0.3 + (knobCompressVal * 1.2); // knob compressor changes amplitude
+    state.colorAlpha = 0.08 + (knobGlowVal * 0.22); // knob glow changes line opacity (ranges 8% to 30%)
+    state.speedScale = 0.3 + (knobSpeedVal * 2.0);   // knob speed changes wave frequency
+    state.amplitudeScale = 0.2 + (knobCompressVal * 2.2); // knob compressor changes amplitude
 
     state.time += 0.005 * state.speedScale;
 
-    // Draw three stacked sine waves
-    drawWave(2, 65, 0.001, state.colorAlpha, '#A855F7'); // Purple
-    drawWave(3, 40, 0.0015, state.colorAlpha * 0.8, '#06B6D4'); // Teal
-    drawWave(1.5, 90, 0.0008, state.colorAlpha * 0.5, '#EC4899'); // Pink
+    // Draw three stacked sine waves (higher base amplitude for visibility)
+    drawWave(2, 100, 0.001, state.colorAlpha, '#A855F7'); // Purple
+    drawWave(3, 70, 0.0015, state.colorAlpha * 0.8, '#06B6D4'); // Teal
+    drawWave(1.5, 140, 0.0008, state.colorAlpha * 0.5, '#EC4899'); // Pink
 
     animationFrameId = requestAnimationFrame(draw);
   }
@@ -194,7 +194,7 @@ function initBackgroundCanvas() {
     const freqOffset = (state.mouse.x / state.width) * 0.002;
 
     ctx.strokeStyle = color;
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth = 3.5;
     ctx.globalAlpha = opacity;
 
     for (let x = 0; x < state.width; x += 10) {
