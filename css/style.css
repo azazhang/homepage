@@ -661,6 +661,38 @@ a {
   justify-content: center;
 }
 
+/* Tooltip overlay styling */
+.deck-container::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-bg-accent);
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-fast);
+  pointer-events: none;
+  box-shadow: var(--shadow-sm);
+  z-index: 10;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.deck-container:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
 .vinyl-sleeve {
   width: 190px;
   height: 190px;
@@ -736,6 +768,19 @@ a {
   display: flex;
   gap: var(--space-xl);
   margin-bottom: var(--space-xl);
+}
+
+.synth-help-text {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--color-text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: -8px;
+  margin-bottom: var(--space-md);
+  text-align: center;
+  opacity: 0.85;
 }
 
 .knob-group {
