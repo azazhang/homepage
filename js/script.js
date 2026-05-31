@@ -1,450 +1,735 @@
-// ===== ARTIST WEBSITE INTERACTIVE FUNCTIONALITY =====
-// Modern vanilla JavaScript with ES6+ features
+// ===== JJJ_B INTERACTIVE MUSIC STUDIO SCRIPT =====
+// Modern, high-performance vanilla JavaScript for Alabaster Synth
 
-document.addEventListener('DOMContentLoaded', function() {
-    // ===== INITIALIZATION =====
-    initNavigation();
-    initScrollAnimations();
-    initScrollToTop();
-    initSmoothScrolling();
-    initLoadAnimations();
-    initContactForm();
+document.addEventListener('DOMContentLoaded', () => {
+  // ===== CORE INITIALIZATION =====
+  initNavigation();
+  initScrollReveal();
+  initScrollToTop();
+  
+  // Initialize background Canvas wave animation
+  const bgVisualizer = initBackgroundCanvas();
+
+  // Initialize interactive dials/knobs
+  initHardwareKnobs(bgVisualizer);
+
+  // Initialize discography & dynamic Bandcamp sync
+  initMusicSync();
+
+  // Initialize contact form handler
+  initContactForm();
 });
 
-// ===== MOBILE NAVIGATION =====
+// ===== MOBILE DRAWER NAVIGATION =====
 function initNavigation() {
-    const mobileToggle = document.querySelector('.mobile-menu-toggle');
-    const navLinks = document.querySelector('.nav-links');
-    const navLinkItems = document.querySelectorAll('.nav-link');
-    
-    if (!mobileToggle || !navLinks) return;
-    
-    // Toggle mobile menu
+  const mobileToggle = document.querySelector('.mobile-menu-toggle');
+  const navLinks = document.querySelector('.nav-links');
+  const navLinkItems = document.querySelectorAll('.nav-link');
+  const header = document.querySelector('.header');
+
+  if (mobileToggle && navLinks) {
     mobileToggle.addEventListener('click', () => {
-        mobileToggle.classList.toggle('active');
-        navLinks.classList.toggle('active');
-        document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+      mobileToggle.classList.toggle('active');
+      navLinks.classList.toggle('active');
+      document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
     });
-    
-    // Close mobile menu when clicking nav links
+
     navLinkItems.forEach(link => {
-        link.addEventListener('click', () => {
-            mobileToggle.classList.remove('active');
-            navLinks.classList.remove('active');
-            document.body.style.overflow = '';
-        });
+      link.addEventListener('click', () => {
+        mobileToggle.classList.remove('active');
+        navLinks.classList.remove('active');
+        document.body.style.overflow = '';
+      });
     });
-    
-    // Close mobile menu on escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && navLinks.classList.contains('active')) {
-            mobileToggle.classList.remove('active');
-            navLinks.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-    });
-    
-    // Update active navigation link based on scroll position
-    updateActiveNavLink();
-    window.addEventListener('scroll', debounce(updateActiveNavLink, 100));
+  }
+
+  // Header shrink on scroll
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
 }
 
-// ===== SCROLL ANIMATIONS WITH INTERSECTION OBSERVER =====
-function initScrollAnimations() {
-    // Select ALL animation elements
-    const animationElements = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .scale-in');
-    
-    if (!animationElements.length) return;
-    
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-    
-    animationElements.forEach(element => {
-        // Check if element is already in viewport and make it visible immediately
-        const rect = element.getBoundingClientRect();
-        const isInViewport = rect.top >= 0 && rect.left >= 0 && 
-                           rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && 
-                           rect.right <= (window.innerWidth || document.documentElement.clientWidth);
-        
-        if (isInViewport) {
-            element.classList.add('visible');
-        } else {
-            observer.observe(element);
-        }
+// ===== SCROLL REVEALS USING INTERSECTION OBSERVER =====
+function initScrollReveal() {
+  const fadeElements = document.querySelectorAll('.fade-in');
+  
+  if (!fadeElements.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target); // Trigger once
+      }
     });
+  }, {
+    threshold: 0.05,
+    rootMargin: '0px 0px -40px 0px'
+  });
+
+  fadeElements.forEach(element => {
+    observer.observe(element);
+  });
 }
 
-// ===== SCROLL TO TOP FUNCTIONALITY =====
+// ===== SCROLL TO TOP =====
 function initScrollToTop() {
-    // Create scroll to top button if it doesn't exist
-    let scrollToTopBtn = document.querySelector('.scroll-to-top');
-    
-    if (!scrollToTopBtn) {
-        scrollToTopBtn = document.createElement('button');
-        scrollToTopBtn.className = 'scroll-to-top';
-        scrollToTopBtn.innerHTML = '↑';
-        scrollToTopBtn.setAttribute('aria-label', 'Scroll to top');
-        document.body.appendChild(scrollToTopBtn);
+  let scrollBtn = document.querySelector('.scroll-to-top');
+  
+  if (!scrollBtn) {
+    scrollBtn = document.createElement('button');
+    scrollBtn.className = 'scroll-to-top';
+    scrollBtn.innerHTML = '↑';
+    scrollBtn.setAttribute('aria-label', 'Scroll to top');
+    document.body.appendChild(scrollBtn);
+  }
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > window.innerHeight) {
+      scrollBtn.classList.add('visible');
+    } else {
+      scrollBtn.classList.remove('visible');
     }
-    
-    // Show/hide scroll to top button
-    function toggleScrollToTop() {
-        const scrolled = window.pageYOffset;
-        const coords = document.documentElement.clientHeight;
-        
-        if (scrolled > coords) {
-            scrollToTopBtn.classList.add('visible');
-        } else {
-            scrollToTopBtn.classList.remove('visible');
-        }
+  });
+
+  scrollBtn.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+}
+
+// ===== INTERACTIVE BACKGROUND CANVAS WAVES =====
+function initBackgroundCanvas() {
+  const canvas = document.getElementById('wave-canvas');
+  if (!canvas) return null;
+
+  const ctx = canvas.getContext('2d');
+  let animationFrameId;
+
+  // State tracker
+  const state = {
+    width: 0,
+    height: 0,
+    mouse: { x: 0, y: 0, targetX: 0, targetY: 0 },
+    speedScale: 1.0,
+    amplitudeScale: 1.0,
+    colorAlpha: 0.07,
+    time: 0
+  };
+
+  function resize() {
+    state.width = window.innerWidth;
+    state.height = window.innerHeight;
+    canvas.width = state.width;
+    canvas.height = state.height;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Hover tracking
+  window.addEventListener('mousemove', (e) => {
+    state.mouse.targetX = e.clientX;
+    state.mouse.targetY = e.clientY;
+  });
+
+  // Main render loop
+  function draw() {
+    ctx.clearRect(0, 0, state.width, state.height);
+
+    // Damping mouse position
+    state.mouse.x += (state.mouse.targetX - state.mouse.x) * 0.05;
+    state.mouse.y += (state.mouse.targetY - state.mouse.y) * 0.05;
+
+    // Load custom dial knob variables from CSS custom properties
+    const style = getComputedStyle(document.documentElement);
+    const knobGlowVal = parseFloat(style.getPropertyValue('--glow-strength') || '1.0');
+    const knobSpeedVal = parseFloat(style.getPropertyValue('--visualizer-speed') || '1.0');
+    const knobCompressVal = parseFloat(style.getPropertyValue('--compressor-val') || '0.6');
+
+    state.colorAlpha = 0.03 + (knobGlowVal * 0.08); // knob glow changes line opacity
+    state.speedScale = 0.4 + (knobSpeedVal * 1.5);   // knob speed changes wave frequency
+    state.amplitudeScale = 0.3 + (knobCompressVal * 1.2); // knob compressor changes amplitude
+
+    state.time += 0.005 * state.speedScale;
+
+    // Draw three stacked sine waves
+    drawWave(2, 65, 0.001, state.colorAlpha, '#A855F7'); // Purple
+    drawWave(3, 40, 0.0015, state.colorAlpha * 0.8, '#06B6D4'); // Teal
+    drawWave(1.5, 90, 0.0008, state.colorAlpha * 0.5, '#EC4899'); // Pink
+
+    animationFrameId = requestAnimationFrame(draw);
+  }
+
+  function drawWave(frequencyScale, baseAmplitude, density, opacity, color) {
+    ctx.save();
+    ctx.beginPath();
+
+    const midY = state.height / 2;
+    // Mouse warp factor
+    const warpOffset = (state.mouse.y - midY) * 0.15;
+    const freqOffset = (state.mouse.x / state.width) * 0.002;
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+    ctx.globalAlpha = opacity;
+
+    for (let x = 0; x < state.width; x += 10) {
+      const angle = (x * density * frequencyScale) + state.time + freqOffset;
+      // Core wave calculation
+      const waveVal = Math.sin(angle) * baseAmplitude * state.amplitudeScale;
+      // Scroll-wave factor
+      const scrollFactor = Math.sin(x * 0.005 + state.time) * 15;
+      const y = midY + waveVal + warpOffset + scrollFactor;
+
+      if (x === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        ctx.lineTo(x, y);
+      }
     }
-    
-    // Smooth scroll to top
-    scrollToTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-    
-    window.addEventListener('scroll', debounce(toggleScrollToTop, 100));
-}
 
-// ===== SMOOTH SCROLLING FOR ANCHOR LINKS =====
-function initSmoothScrolling() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            
-            if (target) {
-                const headerHeight = document.querySelector('.header').offsetHeight;
-                const targetPosition = target.offsetTop - headerHeight - 20;
-                
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-}
+    ctx.stroke();
+    ctx.restore();
+  }
 
-// ===== PAGE LOAD ANIMATIONS =====
-function initLoadAnimations() {
-    // Add entrance animations to hero elements
-    const heroTitle = document.querySelector('.hero-title');
-    const heroSubtitle = document.querySelector('.hero-subtitle');
-    const heroButton = document.querySelector('.hero .btn');
-    
-    if (heroTitle) heroTitle.style.animationDelay = '0.5s';
-    if (heroSubtitle) heroSubtitle.style.animationDelay = '0.8s';
-    if (heroButton) {
-        heroButton.style.opacity = '0';
-        heroButton.style.transform = 'translateY(30px)';
-        heroButton.style.transition = 'all 0.6s ease-out';
-        setTimeout(() => {
-            heroButton.style.opacity = '1';
-            heroButton.style.transform = 'translateY(0)';
-        }, 1100);
+  draw();
+
+  return {
+    updateKnobValues: () => {
+      // Prompt CSS refresh triggers automatically
     }
+  };
 }
 
-// ===== UPDATE ACTIVE NAVIGATION LINK =====
-function updateActiveNavLink() {
-    const sections = document.querySelectorAll('section[id], .hero[id]');
-    const navLinks = document.querySelectorAll('.nav-link');
-    
-    let current = '';
-    const scrollPosition = window.pageYOffset + 200;
-    
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        
-        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-            current = section.getAttribute('id');
-        }
-    });
-    
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === `#${current}` || 
-            (current === 'hero' && link.getAttribute('href') === '/')) {
-            link.classList.add('active');
-        }
-    });
-}
+// ===== HARDWARE DIALS DRAG-ROTATION CONTROLLERS =====
+function initHardwareKnobs(bgVisualizer) {
+  const knobs = document.querySelectorAll('.knob');
 
-// ===== CONTACT FORM HANDLING =====
-function initContactForm() {
-    const contactForm = document.getElementById('contactForm');
-    if (!contactForm) return;
-    
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Get form data
-        const formData = new FormData(contactForm);
-        const name = formData.get('name');
-        const email = formData.get('email');
-        const subject = formData.get('subject');
-        const message = formData.get('message');
-        
-        // Create mailto link
-        const mailto = `mailto:contact@azhang.eu.org?subject=${encodeURIComponent(subject || 'Contact from Website')}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`)}`;
-        
-        // Open email client
-        window.location.href = mailto;
-        
-        // Show success message
-        showFormStatus('Message prepared! Your email client should open now.', 'success');
-        
-        // Reset form after short delay
-        setTimeout(() => {
-            contactForm.reset();
-        }, 1000);
-    });
-}
-
-function showFormStatus(message, type) {
-    const statusDiv = document.getElementById('form-status') || createStatusDiv();
-    statusDiv.textContent = message;
-    statusDiv.className = `form-status ${type}`;
-    statusDiv.style.display = 'block';
-    
-    setTimeout(() => {
-        statusDiv.style.display = 'none';
-    }, 5000);
-}
-
-function createStatusDiv() {
-    const statusDiv = document.createElement('div');
-    statusDiv.id = 'form-status';
-    statusDiv.style.marginTop = '1rem';
-    statusDiv.style.padding = '1rem';
-    statusDiv.style.borderRadius = '0.5rem';
-    statusDiv.style.display = 'none';
-    
-    const form = document.getElementById('contactForm');
-    if (form && form.parentNode) {
-        form.parentNode.insertBefore(statusDiv, form.nextSibling);
-    }
-    
-    return statusDiv;
-}
-
-// ===== UTILITY FUNCTIONS =====
-
-// Debounce function for performance optimization
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
+  knobs.forEach(knob => {
+    const needle = knob.querySelector('.knob-needle');
+    const propertyMap = {
+      'knob-glow': '--glow-strength',
+      'knob-speed': '--visualizer-speed',
+      'knob-eq': '--compressor-val'
     };
-}
-
-// ===== ENHANCED CARD INTERACTIONS =====
-function initCardEnhancements() {
-    const cards = document.querySelectorAll('.card');
+    const propName = propertyMap[knob.id];
     
-    cards.forEach(card => {
-        // Add enhanced hover effects
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-8px) scale(1.02)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
-        });
-        
-        // Add click ripple effect
-        card.addEventListener('click', function(e) {
-            const ripple = document.createElement('div');
-            const rect = this.getBoundingClientRect();
-            const size = 60;
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
-            
-            ripple.style.cssText = `
-                position: absolute;
-                border-radius: 50%;
-                background: rgba(0, 128, 128, 0.3);
-                width: ${size}px;
-                height: ${size}px;
-                left: ${x}px;
-                top: ${y}px;
-                animation: ripple 0.6s ease-out;
-                pointer-events: none;
-            `;
-            
-            this.style.position = 'relative';
-            this.style.overflow = 'hidden';
-            this.appendChild(ripple);
-            
-            setTimeout(() => {
-                ripple.remove();
-            }, 600);
-        });
+    // Set initial position based on initial value
+    const initialPercent = parseFloat(knob.getAttribute('data-val') || '50') / 100;
+    const initialDegrees = (initialPercent * 280) - 140; // -140 to +140 range
+    if (needle) needle.style.transform = `rotate(${initialDegrees}deg)`;
+
+    // Rotation dragging state
+    let isDragging = false;
+    let startY = 0;
+    let startVal = parseFloat(knob.getAttribute('data-val') || '50');
+
+    knob.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startY = e.clientY;
+      startVal = parseFloat(knob.getAttribute('data-val') || '50');
+      document.body.style.cursor = 'grabbing';
+      e.preventDefault();
     });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+
+      const deltaY = startY - e.clientY; // drag up to increase
+      const sensitivity = 0.5; // adjust rotation speed
+      let newVal = startVal + (deltaY * sensitivity);
+      newVal = Math.max(0, Math.min(100, newVal)); // cap 0-100
+
+      knob.setAttribute('data-val', newVal.toString());
+
+      // Update needle rotation
+      const percent = newVal / 100;
+      const angle = (percent * 280) - 140;
+      if (needle) needle.style.transform = `rotate(${angle}deg)`;
+
+      // Write value to CSS custom property
+      const mappedVal = percent; // map to 0.0 - 1.0 range
+      document.documentElement.style.setProperty(propName, mappedVal.toString());
+
+      // If active, update background canvas
+      if (bgVisualizer) bgVisualizer.updateKnobValues();
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isDragging) {
+        isDragging = false;
+        document.body.style.cursor = '';
+      }
+    });
+
+    // Touch support for mobile devices
+    knob.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      startY = e.touches[0].clientY;
+      startVal = parseFloat(knob.getAttribute('data-val') || '50');
+      e.preventDefault();
+    });
+
+    document.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      const deltaY = startY - e.touches[0].clientY;
+      const sensitivity = 0.5;
+      let newVal = startVal + (deltaY * sensitivity);
+      newVal = Math.max(0, Math.min(100, newVal));
+      knob.setAttribute('data-val', newVal.toString());
+      const percent = newVal / 100;
+      const angle = (percent * 280) - 140;
+      if (needle) needle.style.transform = `rotate(${angle}deg)`;
+      const mappedVal = percent;
+      document.documentElement.style.setProperty(propName, mappedVal.toString());
+      if (bgVisualizer) bgVisualizer.updateKnobValues();
+    });
+
+    document.addEventListener('touchend', () => {
+      isDragging = false;
+    });
+  });
 }
 
-// ===== MUSIC PLAYER PLACEHOLDER FUNCTIONALITY =====
-function initMusicPlayerPlaceholders() {
-    const musicPlaceholders = document.querySelectorAll('.music-embed-placeholder');
-    
-    musicPlaceholders.forEach(placeholder => {
-        const playButton = placeholder.querySelector('.play-button');
-        if (playButton) {
-            playButton.addEventListener('click', function() {
-                // This is a placeholder - in real implementation, 
-                // this would trigger the actual embedded player
-                this.textContent = this.textContent === '▶️' ? '⏸️' : '▶️';
-                placeholder.classList.toggle('playing');
-            });
+// ===== BANDCAMP AUTO-SYNC SCRAPER & DECKS LOGIC =====
+function fixImagePath(path) {
+  if (!path) return '';
+  if (path.startsWith('http://') || path.startsWith('https://')) return path;
+  
+  const isSubdir = window.location.pathname.includes('/music/') || window.location.pathname.includes('/contact/');
+  if (isSubdir) {
+    if (path.startsWith('../')) return path;
+    return '../' + path;
+  }
+  return path;
+}
+
+function initMusicSync() {
+  const catalogGrid = document.getElementById('catalog-grid');
+  const consoleSelectorsList = document.getElementById('console-selectors-list');
+  const syncBanner = document.getElementById('catalog-sync-indicator');
+
+  let activeCatalog = [...window.musicData]; // fallback to static catalog data
+
+  // Helper to fetch with a timeout
+  async function fetchWithTimeout(resource, options = {}) {
+    const { timeout = 10000 } = options;
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(resource, {
+        ...options,
+        signal: controller.signal
+      });
+      clearTimeout(id);
+      return response;
+    } catch (error) {
+      clearTimeout(id);
+      throw error;
+    }
+  }
+
+  // Sequentially attempt to fetch and parse Bandcamp page using multiple CORS proxies
+  async function scrapeBandcamp() {
+    const bandcampPage = 'https://jjjb.bandcamp.com/music';
+    const proxyList = [
+      {
+        url: 'https://api.allorigins.win/get?url=' + encodeURIComponent(bandcampPage),
+        type: 'json'
+      },
+      {
+        url: 'https://corsproxy.io/?url=' + encodeURIComponent(bandcampPage),
+        type: 'text'
+      }
+    ];
+
+    for (const proxy of proxyList) {
+      try {
+        console.log(`Attempting Bandcamp sync via: ${proxy.url}`);
+        const response = await fetchWithTimeout(proxy.url, { timeout: 10000 });
+        if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+        
+        let htmlContent = '';
+        if (proxy.type === 'json') {
+          const json = await response.json();
+          htmlContent = json.contents;
+        } else {
+          htmlContent = await response.text();
         }
-    });
-}
 
-// ===== FORM ENHANCEMENTS =====
-function initFormEnhancements() {
-    const formInputs = document.querySelectorAll('.form-input, .form-textarea');
-    
-    formInputs.forEach(input => {
-        // Add floating label effect
-        input.addEventListener('focus', function() {
-            this.parentElement.classList.add('focused');
-        });
-        
-        input.addEventListener('blur', function() {
-            if (!this.value) {
-                this.parentElement.classList.remove('focused');
-            }
-        });
-        
-        // Add real-time validation feedback
-        input.addEventListener('input', function() {
-            if (this.checkValidity()) {
-                this.classList.remove('invalid');
-                this.classList.add('valid');
-            } else {
-                this.classList.remove('valid');
-                this.classList.add('invalid');
-            }
-        });
-    });
-    
-    // Handle form submission
-    const contactForm = document.querySelector('#contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Basic form validation
-            const formData = new FormData(this);
-            const name = formData.get('name');
-            const email = formData.get('email');
-            const message = formData.get('message');
-            
-            if (name && email && message) {
-                // Show success message (placeholder)
-                showNotification('Thank you for your message! I\'ll get back to you soon.', 'success');
-                this.reset();
-            } else {
-                showNotification('Please fill in all required fields.', 'error');
-            }
-        });
-    }
-}
+        if (!htmlContent) throw new Error('Empty response');
 
-// ===== NOTIFICATION SYSTEM =====
-function showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.textContent = message;
-    
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 1rem 1.5rem;
-        border-radius: 0.5rem;
-        color: white;
-        font-weight: 600;
-        z-index: 10000;
-        transform: translateX(100%);
-        transition: transform 0.3s ease-out;
-        ${type === 'success' ? 'background: #10B981;' : ''}
-        ${type === 'error' ? 'background: #EF4444;' : ''}
-        ${type === 'info' ? 'background: #3B82F6;' : ''}
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Animate in
-    setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-    }, 100);
-    
-    // Auto remove
-    setTimeout(() => {
-        notification.style.transform = 'translateX(100%)';
-        setTimeout(() => {
-            notification.remove();
-        }, 300);
-    }, 4000);
-}
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlContent, 'text/html');
+        const gridItems = doc.querySelectorAll('ol#music-grid li.music-grid-item');
 
-// ===== INITIALIZE ADDITIONAL FEATURES =====
-window.addEventListener('load', () => {
-    initCardEnhancements();
-    initMusicPlayerPlaceholders();
-    initFormEnhancements();
-});
+        if (!gridItems.length) throw new Error('No items found in Bandcamp HTML');
 
-// ===== CSS ANIMATION KEYFRAMES (INJECTED VIA JS) =====
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes ripple {
-        to {
-            transform: scale(4);
-            opacity: 0;
+        const scrapedAlbums = [];
+        gridItems.forEach(item => {
+          const item_id = item.getAttribute('data-item-id') || '';
+          const rawId = item_id.replace('album-', '');
+          const link = item.querySelector('a')?.getAttribute('href') || '';
+          const title = item.querySelector('p.title')?.textContent.trim() || '';
+          const thumbImg = item.querySelector('img')?.getAttribute('src') || '';
+
+          // Scale thumbnail to high-res format
+          const coverImg = thumbImg.replace('_2.jpg', '_10.jpg');
+          const bandcampUrl = 'https://jjjb.bandcamp.com' + link;
+
+          // Try mapping details to local catalog to keep descriptions, tracks, and years
+          const matchedLocal = window.musicData.find(album => album.title.toLowerCase() === title.toLowerCase());
+
+          scrapedAlbums.push({
+            id: rawId,
+            title: title,
+            year: matchedLocal ? matchedLocal.year : '2025',
+            genre: matchedLocal ? matchedLocal.genre : 'Ambient / Electronic',
+            description: matchedLocal ? matchedLocal.description : 'Explore JJJ_B tracks dynamically synced directly from Bandcamp.',
+            bandcampUrl: bandcampUrl,
+            coverUrl: coverImg,
+            spotifyUrl: matchedLocal ? matchedLocal.spotifyUrl : 'https://open.spotify.com/artist/3KeabuK2JtljSMRhYlcVBc',
+            appleMusicUrl: matchedLocal ? matchedLocal.appleMusicUrl : 'https://music.apple.com/us/artist/jjj-b/1586552449',
+            tracks: matchedLocal ? matchedLocal.tracks : ['Explore track details on Bandcamp']
+          });
+        });
+
+        if (scrapedAlbums.length > 0) {
+          return scrapedAlbums;
         }
+      } catch (err) {
+        console.warn(`Proxy scrape attempt failed for ${proxy.url}:`, err);
+      }
     }
-    
-    .notification {
-        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    }
-    
-    .form-input.valid,
-    .form-textarea.valid {
-        border-color: #10B981;
-    }
-    
-    .form-input.invalid,
-    .form-textarea.invalid {
-        border-color: #EF4444;
-    }
-    
-    .music-embed-placeholder.playing {
-        background: rgba(0, 128, 128, 0.1);
-    }
-`;
+    throw new Error('All CORS proxies failed or returned empty content.');
+  }
 
-document.head.appendChild(style); 
+  // Execute sync
+  scrapeBandcamp()
+    .then(scrapedAlbums => {
+      activeCatalog = scrapedAlbums;
+      if (syncBanner) {
+        syncBanner.innerHTML = '🟢 Synced with Bandcamp';
+        syncBanner.classList.remove('fallback');
+        syncBanner.classList.add('synced');
+      }
+      renderLayouts(activeCatalog);
+    })
+    .catch(err => {
+      console.warn('Bandcamp sync failed. Using local database fallback. Error details:', err);
+      if (syncBanner) {
+        syncBanner.innerHTML = '🟡 Loaded Local Database (Offline)';
+        syncBanner.classList.remove('synced');
+        syncBanner.classList.add('fallback');
+      }
+      renderLayouts(activeCatalog);
+    });
+
+  // Render layouts once catalog is ready
+  function renderLayouts(catalog) {
+    // 1. RENDER HOMEPAGE SELECTORS ROW
+    if (consoleSelectorsList) {
+      consoleSelectorsList.innerHTML = '';
+      catalog.forEach((album, idx) => {
+        const btn = document.createElement('button');
+        btn.className = `album-select-btn ${idx === 0 ? 'active' : ''}`;
+        btn.setAttribute('data-id', album.id);
+        btn.setAttribute('aria-label', `Select album ${album.title}`);
+        btn.innerHTML = `
+          <div class="select-artwork-box">
+            <img src="${fixImagePath(album.coverUrl)}" alt="${album.title} Cover">
+          </div>
+          <span class="select-title-label">${album.title}</span>
+        `;
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.album-select-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          loadAlbumIntoConsole(album);
+        });
+        consoleSelectorsList.appendChild(btn);
+      });
+
+      // Load initial album details
+      loadAlbumIntoConsole(catalog[0]);
+    }
+
+    // 2. RENDER MUSIC PAGE CATALOG GRID
+    if (catalogGrid) {
+      catalogGrid.innerHTML = '';
+      catalog.forEach((album) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'music-card-wrapper fade-in';
+        wrapper.innerHTML = `
+          <div class="catalog-deck-box">
+            <div class="vinyl-sleeve">
+              <img src="${fixImagePath(album.coverUrl)}" alt="${album.title} Cover" class="active-album-cover">
+            </div>
+            <div class="vinyl-record">
+              <div class="vinyl-label" style="background-image: url('${fixImagePath(album.coverUrl)}');"></div>
+            </div>
+          </div>
+          <div class="music-card-details">
+            <span class="catalog-genre">${album.genre}</span>
+            <h3 class="catalog-card-title">${album.title}</h3>
+            <span class="catalog-card-meta">${album.year} • ${album.tracks.length} tracks</span>
+          </div>
+        `;
+        wrapper.addEventListener('click', () => {
+          // If spotlight widget is on music page, load selected album into it!
+          const spotlightTitle = document.getElementById('spotlight-title');
+          if (spotlightTitle) {
+            loadAlbumIntoSpotlight(album);
+            const spotlightDeck = document.getElementById('spotlight-deck');
+            if (spotlightDeck) {
+              spotlightDeck.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }
+        });
+        catalogGrid.appendChild(wrapper);
+      });
+      initScrollReveal(); // Trigger reveals for newly created cards
+    }
+
+    // 3. INITIALIZE SPOTLIGHT PLAYER IF PRESENT
+    if (document.getElementById('spotlight-title')) {
+      loadAlbumIntoSpotlight(catalog[0]);
+    }
+  }
+
+  // ===== LOAD ALBUM INTO HOMEPAGE CONSOLE =====
+  function loadAlbumIntoConsole(album) {
+    const cover = document.getElementById('console-cover');
+    const vinylLabel = document.getElementById('console-vinyl-label');
+    const title = document.getElementById('console-title');
+    const genre = document.getElementById('console-genre');
+    const year = document.getElementById('console-year');
+    const consoleConsole = document.getElementById('player-console');
+
+    // Embed links
+    const bcIframe = document.getElementById('bc-iframe');
+    const linkSpotify = document.getElementById('link-spotify');
+    const linkBandcamp = document.getElementById('link-bandcamp');
+    const linkApple = document.getElementById('link-apple');
+
+    if (cover) cover.src = fixImagePath(album.coverUrl);
+    if (vinylLabel) vinylLabel.style.backgroundImage = `url('${fixImagePath(album.coverUrl)}')`;
+    if (title) title.textContent = album.title;
+    if (genre) genre.textContent = album.genre;
+    if (year) year.textContent = album.year;
+
+    // Load active Bandcamp embed
+    if (bcIframe) {
+      bcIframe.src = `https://bandcamp.com/EmbeddedPlayer/album=${album.id}/size=large/bgcol=faf9f6/linkcol=a855f7/tracklist=true/artwork=none/transparent=true/`;
+    }
+
+    // Set streaming destination links
+    if (linkSpotify) linkSpotify.href = album.spotifyUrl;
+    if (linkBandcamp) linkBandcamp.href = album.bandcampUrl;
+    if (linkApple) linkApple.href = album.appleMusicUrl;
+
+    // Trigger spinning record
+    if (consoleConsole) {
+      consoleConsole.classList.add('playing');
+    }
+
+    // Start CRT screen visualizer animation
+    startScreenVisualizer();
+  }
+
+  // ===== LOAD ALBUM INTO MUSIC PAGE SPOTLIGHT =====
+  function loadAlbumIntoSpotlight(album) {
+    const cover = document.getElementById('spotlight-cover');
+    const vinylLabel = document.getElementById('spotlight-vinyl-label');
+    const title = document.getElementById('spotlight-title');
+    const genre = document.getElementById('spotlight-genre');
+    const year = document.getElementById('spotlight-year');
+    const desc = document.getElementById('spotlight-desc');
+    const bcIframe = document.getElementById('spotlight-bc-iframe');
+    const spotlightDeck = document.getElementById('spotlight-deck');
+
+    if (cover) cover.src = fixImagePath(album.coverUrl);
+    if (vinylLabel) vinylLabel.style.backgroundImage = `url('${fixImagePath(album.coverUrl)}')`;
+    if (title) title.textContent = album.title;
+    if (genre) genre.textContent = album.genre;
+    if (year) year.textContent = album.year;
+    if (desc) desc.textContent = album.description;
+
+    if (bcIframe) {
+      bcIframe.src = `https://bandcamp.com/EmbeddedPlayer/album=${album.id}/size=large/bgcol=faf9f6/linkcol=a855f7/tracklist=true/artwork=none/transparent=true/`;
+    }
+
+    if (spotlightDeck) {
+      spotlightDeck.classList.add('playing');
+    }
+  }
+
+  // ===== PLAYER TAB DECK SWITCHERS =====
+  // 1. Home page player tabs
+  const tabBandcamp = document.getElementById('tab-bandcamp');
+  const tabSpotify = document.getElementById('tab-spotify');
+  const bcWrapper = document.getElementById('bandcamp-embed-wrapper');
+  const spotWrapper = document.getElementById('spotify-embed-wrapper');
+
+  if (tabBandcamp && tabSpotify) {
+    tabBandcamp.addEventListener('click', () => {
+      tabBandcamp.classList.add('active');
+      tabSpotify.classList.remove('active');
+      bcWrapper.classList.add('active');
+      spotWrapper.classList.remove('active');
+    });
+
+    tabSpotify.addEventListener('click', () => {
+      tabSpotify.classList.add('active');
+      tabBandcamp.classList.remove('active');
+      spotWrapper.classList.add('active');
+      bcWrapper.classList.remove('active');
+    });
+  }
+
+  // 2. Music page spotlight tabs
+  const spotlightTabBc = document.getElementById('spotlight-tab-bc');
+  const spotlightTabSpot = document.getElementById('spotlight-tab-spot');
+  const spotlightBcWrapper = document.getElementById('spotlight-bc-wrapper');
+  const spotlightSpotWrapper = document.getElementById('spotlight-spot-wrapper');
+
+  if (spotlightTabBc && spotlightTabSpot) {
+    spotlightTabBc.addEventListener('click', () => {
+      spotlightTabBc.classList.add('active');
+      spotlightTabSpot.classList.remove('active');
+      spotlightBcWrapper.classList.add('active');
+      spotlightSpotWrapper.classList.remove('active');
+    });
+
+    spotlightTabSpot.addEventListener('click', () => {
+      spotlightTabSpot.classList.add('active');
+      spotlightTabBc.classList.remove('active');
+      spotlightSpotWrapper.classList.add('active');
+      spotlightBcWrapper.classList.remove('active');
+    });
+  }
+}
+
+// ===== CRT SCREEN EQUALIZER WAVEFORM =====
+let visualizerInterval = null;
+function startScreenVisualizer() {
+  const canvas = document.getElementById('console-visualizer-canvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  const vuLeds = document.querySelectorAll('.vu-led');
+  
+  // Set dimensions
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+
+  if (visualizerInterval) {
+    cancelAnimationFrame(visualizerInterval);
+  }
+
+  const barsCount = 28;
+  const bars = Array.from({ length: barsCount }, () => ({
+    targetHeight: Math.random() * canvas.height,
+    currentHeight: 0,
+    speed: 0.1 + Math.random() * 0.15
+  }));
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Read Compressor knob dial multiplier
+    const style = getComputedStyle(document.documentElement);
+    const compressorVal = parseFloat(style.getPropertyValue('--compressor-val') || '0.6');
+    const scaleFactor = 0.4 + (compressorVal * 1.3);
+
+    const barWidth = canvas.width / barsCount;
+    let totalHeight = 0;
+
+    for (let i = 0; i < barsCount; i++) {
+      const bar = bars[i];
+      
+      // Interpolate sizes
+      if (Math.abs(bar.currentHeight - bar.targetHeight) < 2) {
+        bar.targetHeight = Math.random() * canvas.height * scaleFactor;
+      }
+      bar.currentHeight += (bar.targetHeight - bar.currentHeight) * bar.speed;
+      totalHeight += bar.currentHeight;
+
+      // Draw active green visualizer bar
+      ctx.fillStyle = '#10B981';
+      ctx.fillRect(
+        i * barWidth + 1, 
+        canvas.height - bar.currentHeight, 
+        barWidth - 2, 
+        bar.currentHeight
+      );
+    }
+
+    // Animate physical VU meter LEDs
+    const avgHeight = totalHeight / barsCount;
+    const heightPercent = avgHeight / canvas.height;
+    // Map to active levels (0 to 6)
+    const activeLevel = Math.min(6, Math.floor(heightPercent * 10));
+
+    vuLeds.forEach(led => {
+      const level = parseInt(led.getAttribute('data-level') || '1');
+      if (level <= activeLevel) {
+        led.classList.add('active');
+      } else {
+        led.classList.remove('active');
+      }
+    });
+
+    visualizerInterval = requestAnimationFrame(animate);
+  }
+
+  animate();
+}
+
+// ===== CONTACT FORM PATCH-BAY LINK =====
+function initContactForm() {
+  const form = document.getElementById('contactForm');
+  if (!form) return;
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const name = formData.get('name');
+    const email = formData.get('email');
+    const subject = formData.get('subject') || 'General Inquiry';
+    const message = formData.get('message');
+
+    // Build the mailto scheme
+    const mailtoSubject = `[JJJ_B Website Inquiry] ${subject}`;
+    const mailtoBody = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+    const mailtoLink = `mailto:contact@azhang.eu.org?subject=${encodeURIComponent(mailtoSubject)}&body=${encodeURIComponent(mailtoBody)}`;
+
+    // Set dynamic status notice
+    let statusDiv = document.getElementById('form-status');
+    if (!statusDiv) {
+      statusDiv = document.createElement('div');
+      statusDiv.id = 'form-status';
+      form.appendChild(statusDiv);
+    }
+
+    try {
+      window.location.href = mailtoLink;
+      statusDiv.textContent = '✅ Message compiled! Opening your email client...';
+      statusDiv.className = 'form-status success';
+      form.reset();
+    } catch (err) {
+      statusDiv.textContent = '❌ Failed to open email client. Please send mail manually to: contact@azhang.eu.org';
+      statusDiv.className = 'form-status error';
+    }
+
+    setTimeout(() => {
+      statusDiv.style.display = 'none';
+    }, 8000);
+  });
+}

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="JJJ_B - Independent Music Artist & Electronic Producer. Discover original ambient and experimental music including 'Gloomy Vapor' and 'Knocking like a mess'.">
-    <meta name="keywords" content="JJJ_B, electronic music, independent artist, ambient music, experimental music, Gloomy Vapor, Knocking like a mess, original compositions">
+    <meta name="keywords" content="JJJ_B, electronic music, independent artist, ambient music, experimental music, Gloomy Vapor, Knocking like a mess, original compositions, studio J, azazhang">
     <meta name="author" content="JJJ_B">
     
     <!-- Open Graph / Facebook -->
@@ -26,7 +26,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <!-- Stylesheets -->
     <link rel="stylesheet" href="css/style.css">
@@ -34,7 +34,14 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="images/head_portrait_new.png">
 </head>
-<body>
+<body class="light-theme">
+    
+    <!-- ===== DYNAMIC BACKGROUND ELEMENTS ===== -->
+    <canvas id="wave-canvas"></canvas>
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="ambient-glow glow-3"></div>
+
     <!-- ===== HEADER & NAVIGATION ===== -->
     <header class="header">
         <nav class="nav container">
@@ -54,162 +61,296 @@
 
     <!-- ===== MAIN CONTENT ===== -->
     <main>
-        <!-- ===== HERO SECTION ===== -->
-        <section class="hero" id="hero">
-            <div class="container">
-                <div class="hero-content">
-                    <div class="hero-avatar">
-                        <img src="images/head_portrait_new.png" alt="JJJ_B - Independent Music Artist" class="hero-avatar-image">
+        
+        <!-- ===== HERO SECTION (ASYMMETRIC GRID) ===== -->
+        <section class="hero-section section" id="hero">
+            <div class="container hero-grid">
+                <!-- Column 1: Info & Intro -->
+                <div class="hero-intro fade-in">
+                    <div class="artist-badge">🎹 Electronic Music & Synthesis</div>
+                    <h1 class="hero-title">Independent electronic soundscapes and live loop sessions.</h1>
+                    <p class="hero-subtitle">
+                        Hi, I'm <strong>JJJ_B</strong> (also known as <strong>azazhang</strong>). I am an independent electronic composer designing ambient textures, experimental noise, and dark trap beats from my physical synthesizer workspace.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#console" class="btn btn-primary">Open Studio Player</a>
+                        <a href="/music/" class="btn btn-secondary">Explore Discography</a>
                     </div>
-                    <p class="hero-subtitle">Independent Music Artist & Electronic Producer</p>
-                    <a href="/music/" class="btn btn-primary">Explore Music</a>
+                    <!-- Social Hub Badges -->
+                    <div class="social-hub">
+                        <a href="https://open.spotify.com/artist/3KeabuK2JtljSMRhYlcVBc" class="social-badge spotify" target="_blank" rel="noopener" aria-label="Spotify">
+                            <span class="badge-icon">🎵</span> Spotify
+                        </a>
+                        <a href="https://jjjb.bandcamp.com/" class="social-badge bandcamp" target="_blank" rel="noopener" aria-label="Bandcamp">
+                            <span class="badge-icon">🎪</span> Bandcamp
+                        </a>
+                        <a href="https://www.youtube.com/@JJJB" class="social-badge youtube" target="_blank" rel="noopener" aria-label="YouTube">
+                            <span class="badge-icon">📺</span> YouTube
+                        </a>
+                        <a href="https://www.instagram.com/az.azhang/" class="social-badge instagram" target="_blank" rel="noopener" aria-label="Instagram">
+                            <span class="badge-icon">📸</span> Instagram
+                        </a>
+                    </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- ===== ABOUT SECTION ===== -->
-        <section class="section" id="about">
-            <div class="container">
-                <div class="grid grid-2 fade-in">
-                    <div class="about-text slide-in-left">
-                        <h2>About the Artist</h2>
-                        <p>
-                            Welcome to my creative universe - I'm an independent music artist exploring diverse sonic territories without the constraints of traditional genre boundaries.
-                        </p>
-                        <p>
-                            My work spans ambient, experimental, and electronic music, with recent releases including <strong>"Gloomy Vapor"</strong>, <strong>"Knocking like a mess"</strong>, <strong>"Fidelity on the Floor"</strong>, and <strong>"Caught in the Trap"</strong>.
-                        </p>
-                        <p>
-                            While I don't typically perform live, I actively share my musical journey through performance videos. You can find me on YouTube as <strong>JJJB</strong> (channel: <strong>Studio J</strong>) and Bilibili, where I share my music-making process. This domain connects to my broader creative identity as <strong>azazhang</strong>.
-                        </p>
-                        <p class="artist-note">
-                            <em>Currently operating as a fully independent artist, I remain open to interesting collaborations and label opportunities.</em>
-                        </p>
-                        
-                        <div class="about-stats">
-                            <div class="stat scale-in">
-                                <h3>35+</h3>
-                                <p>Original Tracks</p>
-                            </div>
-                            <div class="stat scale-in">
-                                <h3>5</h3>
-                                <p>Platform Presence</p>
-                            </div>
-                            <div class="stat scale-in">
-                                <h3>100%</h3>
-                                <p>Independent</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="about-image slide-in-right">
-                        <img src="images/head_portrait_new.png" alt="JJJ_B - Independent Music Artist" class="artist-photo">
+                <!-- Column 2: Interactive Portal -->
+                <div class="hero-portal fade-in">
+                    <div class="portal-frame">
+                        <div class="neon-ring"></div>
+                        <img src="images/head_portrait_new.png" alt="JJJ_B Portrait" class="portal-portrait">
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ===== SECTION DIVIDER ===== -->
-        <div class="section-divider"></div>
-
-        <!-- ===== MUSIC PLATFORMS SECTION ===== -->
-        <section class="section section-sm" id="platforms">
+        <!-- ===== "STUDIO PLAYER" CONSOLE SECTION ===== -->
+        <section class="section" id="console">
             <div class="container">
                 <div class="text-center mb-5 fade-in">
-                    <h2>Where to Find My Music</h2>
-                    <p>Stream, watch, and support across all major platforms</p>
+                    <h2 class="section-title">The Studio mixing Desk</h2>
+                    <p class="section-desc">Stream and preview releases dynamically synced directly from Bandcamp</p>
                 </div>
-                
-                <div class="platforms-grid fade-in">
-                    <!-- Streaming Platforms -->
-                    <div class="platform-category">
-                        <h3 class="category-title">🎧 Streaming Platforms</h3>
-                        <p class="category-description">Listen to my complete discography on your preferred streaming service</p>
-                        <div class="platform-grid">
-                            <a href="https://open.spotify.com/artist/3KeabuK2JtljSMRhYlcVBc" class="platform-btn spotify" target="_blank" rel="noopener">
-                                <span class="platform-icon">🎵</span>
-                                <span class="platform-name">Spotify</span>
-                            </a>
-                            <a href="https://music.apple.com/us/artist/jjj-b/1586552449" class="platform-btn apple" target="_blank" rel="noopener">
-                                <span class="platform-icon">🍎</span>
-                                <span class="platform-name">Apple Music</span>
-                            </a>
-                        </div>
-                    </div>
 
-                    <!-- Video Content -->
-                    <div class="platform-category">
-                        <h3 class="category-title">📺 Video Content</h3>
-                        <p class="category-description">Watch my music-making process and performance videos</p>
-                        <div class="platform-grid">
-                            <a href="https://www.youtube.com/@JJJB" target="_blank" rel="noopener" class="platform-btn youtube">
-                                <span class="platform-icon">📺</span>
-                                <span class="platform-name">Studio J</span>
-                                <span class="platform-handle">@JJJB</span>
-                            </a>
-                            <a href="https://space.bilibili.com/286754031?spm_id_from=333.1007.0.0" target="_blank" rel="noopener" class="platform-btn bilibili">
-                                <span class="platform-icon">📱</span>
-                                <span class="platform-name">Bilibili</span>
-                            </a>
+                <!-- Physical hardware Console widget -->
+                <div class="hardware-console card fade-in" id="player-console">
+                    
+                    <!-- Left Side: Deck, Visualizer, Synth Knobs -->
+                    <div class="console-hardware">
+                        <!-- Vinyl Deck Visual -->
+                        <div class="deck-container">
+                            <div class="vinyl-sleeve">
+                                <img src="images/album-covers/gloomy-vapor.jpg" alt="Active Cover" class="active-album-cover" id="console-cover">
+                            </div>
+                            <div class="vinyl-record" id="console-vinyl">
+                                <div class="vinyl-label" id="console-vinyl-label" style="background-image: url('images/album-covers/gloomy-vapor.jpg');"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Direct Support -->
-                    <div class="platform-category">
-                        <h3 class="category-title">🎪 Direct Support</h3>
-                        <p class="category-description">Support independent music and access exclusive content</p>
-                        <div class="platform-grid">
-                            <a href="https://jjjb.bandcamp.com/" class="platform-btn bandcamp" target="_blank" rel="noopener">
-                                <span class="platform-icon">🎪</span>
-                                <span class="platform-name">Bandcamp</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===== SECTION DIVIDER ===== -->
-        <div class="section-divider"></div>
-
-        <!-- ===== FEATURED RELEASE SECTION ===== -->
-        <section class="section section-sm" id="featured">
-            <div class="container">
-                <div class="text-center mb-5 fade-in">
-                    <h2>Latest Release</h2>
-                    <p>Discover my newest electronic creation</p>
-                </div>
-                
-                <div class="featured-release fade-in">
-                    <div class="grid grid-2">
-                        <div class="featured-artwork scale-in">
-                            <img src="images/album-covers/gloomy-vapor.jpg" alt="Gloomy Vapor - Album Cover" class="card-image">
-                        </div>
-                        <div class="featured-content slide-in-right">
-                            <h3 class="featured-title">Gloomy Vapor</h3>
-                            <p class="featured-artist">JJJ_B</p>
-                            <p class="featured-description">
-                                <strong>"Gloomy Vapor"</strong> represents an atmospheric exploration of ambient textures and vapor-wave influences, creating a dreamlike sonic landscape that captures the essence of melancholic beauty. This album showcases JJJ_B's ability to craft immersive soundscapes that transport listeners through ethereal musical territories.
-                            </p>
-                            <div class="release-info">
-                                <div class="release-details">
-                                    <span class="release-type">🎵 Album</span>
-                                    <span class="release-year">2025</span>
-                                    <span class="release-genre">Ambient / Vaporwave</span>
+                        <!-- Hardware Synth Knobs -->
+                        <div class="synth-knobs">
+                            <div class="knob-group">
+                                <div class="knob" id="knob-glow" data-min="0" data-max="100" data-val="50">
+                                    <svg viewBox="0 0 100 100" class="knob-svg">
+                                        <circle cx="50" cy="50" r="40" class="knob-circle" />
+                                        <line x1="50" y1="50" x2="50" y2="15" class="knob-needle" id="needle-glow" />
+                                    </svg>
                                 </div>
+                                <span class="knob-label">NEON GLOW</span>
+                            </div>
+
+                            <div class="knob-group">
+                                <div class="knob" id="knob-speed" data-min="0" data-max="100" data-val="50">
+                                    <svg viewBox="0 0 100 100" class="knob-svg">
+                                        <circle cx="50" cy="50" r="40" class="knob-circle" />
+                                        <line x1="50" y1="50" x2="50" y2="15" class="knob-needle" id="needle-speed" />
+                                    </svg>
+                                </div>
+                                <span class="knob-label">WAVE SPEED</span>
+                            </div>
+
+                            <div class="knob-group">
+                                <div class="knob" id="knob-eq" data-min="0" data-max="100" data-val="60">
+                                    <svg viewBox="0 0 100 100" class="knob-svg">
+                                        <circle cx="50" cy="50" r="40" class="knob-circle" />
+                                        <line x1="50" y1="50" x2="50" y2="15" class="knob-needle" id="needle-eq" />
+                                    </svg>
+                                </div>
+                                <span class="knob-label">COMPRESSOR</span>
+                            </div>
+                        </div>
+
+                        <!-- Mini Visualizer Screen & VU Meter -->
+                        <div class="hardware-screen-row">
+                            <div class="hardware-screen">
+                                <div class="screen-grid"></div>
+                                <canvas id="console-visualizer-canvas"></canvas>
+                            </div>
+                            <div class="vu-meter">
+                                <div class="vu-led red" data-level="6"></div>
+                                <div class="vu-led yellow" data-level="5"></div>
+                                <div class="vu-led green" data-level="4"></div>
+                                <div class="vu-led green" data-level="3"></div>
+                                <div class="vu-led green" data-level="2"></div>
+                                <div class="vu-led green" data-level="1"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Side: Tracklist, Tabs, Embeds -->
+                    <div class="console-player">
+                        <!-- Release Header Info -->
+                        <div class="console-header">
+                            <span class="active-genre" id="console-genre">Ambient / Vaporwave</span>
+                            <h3 class="active-title" id="console-title">Gloomy Vapor</h3>
+                            <span class="active-year" id="console-year">2025</span>
+                        </div>
+
+                        <!-- Deck Toggle Tabs -->
+                        <div class="console-tabs">
+                            <button class="console-tab active" id="tab-bandcamp" aria-label="Toggle Bandcamp Preview Player">
+                                <span class="tab-dot"></span> 💿 Bandcamp Player
+                            </button>
+                            <button class="console-tab" id="tab-spotify" aria-label="Toggle Spotify Streaming Player">
+                                <span class="tab-dot"></span> 🎧 Spotify Player
+                            </button>
+                        </div>
+
+                        <!-- Embed Container -->
+                        <div class="player-embed-deck">
+                            <!-- Bandcamp Embed Iframe Wrapper -->
+                            <div class="embed-wrapper active" id="bandcamp-embed-wrapper">
+                                <iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=1375316590/size=large/bgcol=faf9f6/linkcol=a855f7/tracklist=false/artwork=none/transparent=true/" seamless id="bc-iframe"><a href="https://jjjb.bandcamp.com/album/gloomy-vapor">Gloomy Vapor by JJJ_B</a></iframe>
                             </div>
                             
-                            <!-- ===== MUSIC PLAYER - SPOTIFY EMBED ===== -->
-                            <div class="music-embed-container">
-                                <div class="embed-header">
-                                    <h4>🎵 Stream "Gloomy Vapor" Now</h4>
+                            <!-- Spotify Embed Iframe Wrapper -->
+                            <div class="embed-wrapper" id="spotify-embed-wrapper">
+                                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/artist/3KeabuK2JtljSMRhYlcVBc?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" id="spot-iframe"></iframe>
+                            </div>
+                        </div>
+
+                        <!-- Direct Platform Links -->
+                        <div class="player-links-box">
+                            <span class="links-title">Stream Full Album On:</span>
+                            <div class="links-grid">
+                                <a href="https://open.spotify.com/artist/3KeabuK2JtljSMRhYlcVBc" target="_blank" rel="noopener" class="stream-btn btn-spotify" id="link-spotify">Spotify</a>
+                                <a href="https://jjjb.bandcamp.com/" target="_blank" rel="noopener" class="stream-btn btn-bandcamp" id="link-bandcamp">Bandcamp</a>
+                                <a href="https://music.apple.com/us/artist/jjj-b/1586552449" target="_blank" rel="noopener" class="stream-btn btn-apple" id="link-apple">Apple Music</a>
+                            </div>
+                        </div>
+
+                        <!-- Discography Album Selectors -->
+                        <div class="album-selectors">
+                            <span class="select-label">Select Release:</span>
+                            <div class="selectors-list" id="console-selectors-list">
+                                <!-- Dynamic album nodes will load here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="/music/" class="btn btn-secondary">Open Full Catalog Page</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== "STUDIO SESSIONS" VIDEO HUB SECTION ===== -->
+        <section class="section" id="sessions">
+            <div class="container">
+                <div class="text-center mb-5 fade-in">
+                    <h2 class="section-title">Behind the Synths</h2>
+                    <p class="section-desc">Join me in the studio. Follow my design steps and hardware jam vlogs.</p>
+                </div>
+
+                <div class="sessions-grid grid grid-2 fade-in">
+                    <!-- Column 1: Main Video Playback -->
+                    <div class="video-main-frame card">
+                        <div class="video-aspect">
+                            <!-- Featured YouTube Video Embed -->
+                             <iframe src="https://www.youtube.com/embed/bhMQ75lgIM4" title="Luv(sic) Pt 6 Cover with Ableton Live Looping" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen id="youtube-main-iframe"></iframe>
+                        </div>
+                        <div class="video-info">
+                            <span class="video-tag">🎥 Featured Video</span>
+                            <h3 class="video-title">Luv(sic) Pt 6 Cover with Ableton Live Looping</h3>
+                            <p class="video-text">
+                                A live looping cover of Nujabes' iconic track. Watch the workflow as I record hardware parts, layer melodies, and program drums in real time using Ableton Live.
+                            </p>
+                            <a href="https://www.youtube.com/@JJJB" target="_blank" rel="noopener" class="video-link">Subscribe to Studio J on YouTube →</a>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Vertical Reels & Shorts Gallery -->
+                    <div class="reels-gallery">
+                        <h3 class="reels-title">Instagram Reels & YouTube Shorts</h3>
+                        <p class="reels-subtitle">Fast synthesizer sessions and daily studio snippets.</p>
+                        
+                        <div class="reels-rack">
+                            <!-- Reel Card 1 -->
+                            <a href="https://www.youtube.com/shorts/BZ2twCAVp4Y" target="_blank" rel="noopener" class="reel-card glass-panel">
+                                <div class="reel-thumbnail">
+                                    <img src="https://img.youtube.com/vi/BZ2twCAVp4Y/hqdefault.jpg" alt="Just the Two of Us cover" class="active-album-cover">
+                                    <div class="play-overlay-icon">▶</div>
                                 </div>
-                                
-                                <!-- Spotify Embed -->
-                                <div class="embed-section">
-                                    <div class="spotify-embed">
-                                        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/artist/3KeabuK2JtljSMRhYlcVBc?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-                                    </div>
+                                <div class="reel-details">
+                                    <span class="reel-tag">⚡ Short Jam</span>
+                                    <h4>Just the Two of Us - EP cover</h4>
+                                    <p>Live looping session using digital pianos and Ableton Live.</p>
                                 </div>
+                            </a>
+
+                            <!-- Reel Card 2 -->
+                            <a href="https://www.youtube.com/shorts/wpRfGOXz_kE" target="_blank" rel="noopener" class="reel-card glass-panel">
+                                <div class="reel-thumbnail">
+                                    <img src="https://img.youtube.com/vi/wpRfGOXz_kE/hqdefault.jpg" alt="Pocket Operator Master Amp" class="active-album-cover">
+                                    <div class="play-overlay-icon">▶</div>
+                                </div>
+                                <div class="reel-details">
+                                    <span class="reel-tag">🎛️ Gear Jam</span>
+                                    <h4>Pocket Master Amp Setup</h4>
+                                    <p>Patching Pocket Operator synthesis and mini amplifier gears.</p>
+                                </div>
+                            </a>
+
+                            <!-- Reel Card 3 -->
+                            <a href="https://www.youtube.com/shorts/8j2mQ7KiKdk" target="_blank" rel="noopener" class="reel-card glass-panel">
+                                <div class="reel-thumbnail">
+                                    <img src="https://img.youtube.com/vi/8j2mQ7KiKdk/hqdefault.jpg" alt="Espresso Live Loop" class="active-album-cover">
+                                    <div class="play-overlay-icon">▶</div>
+                                </div>
+                                <div class="reel-details">
+                                    <span class="reel-tag">📋 Live Loop</span>
+                                    <h4>Sabrina Carpenter - Espresso Loop</h4>
+                                    <p>Sabrina Carpenter's Espresso re-imagined with Ableton live looping.</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== HUMAN vs GENERATIVE PHILOSOPHY ABOUT SECTION ===== -->
+        <section class="section" id="about">
+            <div class="container">
+                <div class="about-grid grid grid-2 fade-in">
+                    <!-- Philosophy Text -->
+                    <div class="about-info">
+                        <span class="artist-badge">🎨 Process</span>
+                        <h2>Behind the Knobs</h2>
+                        <p>
+                            My process is about physical connection with synths and music gear. I compose, arrange, and mix every track using hardware controllers and Ableton Live.
+                        </p>
+                        <p>
+                            Every track under the <strong>JJJ_B</strong> name is composed and mixed from my desktop workspace. I explore ambient textures that combine live looping and FM synthesis with organic keyboard performances, keeping the raw human touch in electronic soundscapes.
+                        </p>
+                        <p>
+                            Through video vlogs on YouTube (Studio J) and Bilibili, I share my workspace, unboxings, and live looping workflows. It's about opening the studio door and sharing how the music is actually structured, track by track.
+                        </p>
+
+                        <!-- Live stats in physical gear display format -->
+                        <div class="gear-specs">
+                            <div class="spec-module">
+                                <span class="spec-label">PLATFORM COVERAGE</span>
+                                <span class="spec-value">GLOBAL</span>
+                            </div>
+                            <div class="spec-module">
+                                <span class="spec-label">ORIGINAL TRACKS</span>
+                                <span class="spec-value">35+</span>
+                            </div>
+                            <div class="spec-module">
+                                <span class="spec-label">INSTRUMENTS</span>
+                                <span class="spec-value">HYBRID</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Portrait & Workspace visual representation -->
+                    <div class="about-gallery">
+                        <div class="gallery-wrapper">
+                            <img src="images/head_portrait_new.png" alt="JJJ_B Studio Session" class="gallery-main-img">
+                            <div class="gallery-caption glass-panel">
+                                <span class="caption-light"></span>
+                                <strong>Operating Space</strong>: Hybrid digital/analog synth rig.
                             </div>
                         </div>
                     </div>
@@ -217,149 +358,54 @@
             </div>
         </section>
 
-        <!-- ===== SECTION DIVIDER ===== -->
-        <div class="section-divider"></div>
-
-        <!-- ===== DISCOGRAPHY PREVIEW ===== -->
-        <section class="section section-sm" id="discography-preview">
-            <div class="container">
-                <div class="text-center mb-5 fade-in">
-                    <h2>Recent Releases</h2>
-                    <p>Explore my electronic music catalog</p>
-                </div>
-                
-                <div class="grid grid-3 fade-in">
-                    <article class="card scale-in">
-                        <div class="music-artwork">
-                            <img src="images/album-covers/knocking-like-a-mess.jpg" alt="Knocking like a mess - Album Cover" class="card-image">
-                        </div>
-                        <div class="card-content">
-                            <h3 class="card-title">Knocking like a mess</h3>
-                            <p class="release-meta">
-                                <span class="release-type">Album</span> • 
-                                <span class="release-date">2025</span>
-                            </p>
-                            <p class="card-text">
-                                An experimental electronic album that masterfully balances chaotic rhythms with structured disorder. "Knocking like a mess" showcases JJJ_B's ability to find beauty in complexity, featuring intricate sound design and innovative production techniques.
-                            </p>
-                        </div>
-                    </article>
-                    
-                    <article class="card scale-in">
-                        <div class="music-artwork">
-                            <img src="images/album-covers/fidelity-on-the-floor.jpg" alt="Fidelity on the Floor - Album Cover" class="card-image">
-                        </div>
-                        <div class="card-content">
-                            <h3 class="card-title">Fidelity on the Floor</h3>
-                            <p class="release-meta">
-                                <span class="release-type">Album</span> • 
-                                <span class="release-date">2024</span>
-                            </p>
-                            <p class="card-text">
-                                "Fidelity on the Floor" is an introspective exploration of sound quality and emotional depth, weaving together lo-fi textures with high-fidelity production techniques to create a unique sonic experience that challenges conventional audio aesthetics.
-                            </p>
-                        </div>
-                    </article>
-                    
-                    <article class="card scale-in">
-                        <div class="music-artwork">
-                            <img src="images/album-covers/caught-in-the-trap.jpg" alt="Caught in the Trap - Album Cover" class="card-image">
-                        </div>
-                        <div class="card-content">
-                            <h3 class="card-title">Caught in the Trap</h3>
-                            <p class="release-meta">
-                                <span class="release-type">Album</span> • 
-                                <span class="release-date">2024</span>
-                            </p>
-                            <p class="card-text">
-                                "Caught in the Trap" is a compelling exploration of cyclical patterns and escapism, blending dark ambient elements with rhythmic trap-influenced beats to create an immersive sonic experience that captures the complexity of modern emotional landscapes.
-                            </p>
-                        </div>
-                    </article>
-                </div>
-                
-                <div class="text-center mt-5">
-                    <a href="/music/" class="btn btn-primary">View Full Discography</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===== SECTION DIVIDER ===== -->
-        <div class="section-divider"></div>
-
-        <!-- ===== LATEST UPDATES SECTION ===== -->
-        <section class="section section-sm" id="updates">
-            <div class="container">
-                <div class="text-center mb-5 fade-in">
-                    <h2>Latest Updates</h2>
-                    <p>Stay connected with my musical journey</p>
-                </div>
-                
-                <div class="grid grid-3 fade-in">
-                    <article class="card slide-in-left">
-                        <div class="card-content">
-                            <h3 class="card-title">New Album in Production</h3>
-                            <p class="card-text">
-                                Currently working on my next full-length album, experimenting with new musical techniques and production methods.
-                            </p>
-                            <time class="card-date">March 2025</time>
-                        </div>
-                    </article>
-                    
-                    <article class="card scale-in">
-                        <div class="card-content">
-                            <h3 class="card-title">Live Electronic Sets</h3>
-                            <p class="card-text">
-                                Planning intimate live electronic performances featuring hardware synthesizers and real-time manipulation of my compositions.
-                            </p>
-                            <time class="card-date">February 2025</time>
-                        </div>
-                    </article>
-                    
-                    <article class="card slide-in-right">
-                        <div class="card-content">
-                            <h3 class="card-title">Collaboration Projects</h3>
-                            <p class="card-text">
-                                Excited to announce upcoming collaborations with fellow electronic artists, exploring new sonic territories together.
-                            </p>
-                            <time class="card-date">January 2025</time>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
     </main>
 
     <!-- ===== FOOTER ===== -->
-    <footer class="footer section-sm">
+    <footer class="footer section">
         <div class="container">
-            <div class="footer-content text-center">
-                <div class="footer-logo mb-3">
-                    <h3>JJJ_B</h3>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3 class="footer-logo">JJJ_B</h3>
+                    <p class="footer-tagline">Independent electronic & ambient composition.</p>
                 </div>
-                <p class="footer-description mb-4">
-                    Creating innovative electronic music experiences with cutting-edge production and artistic vision.
-                </p>
-                <div class="social-links mb-4">
-                    <!-- Real Social Media Links -->
-                    <a href="https://www.youtube.com/@JJJB" class="social-link" target="_blank" rel="noopener" aria-label="YouTube">📺</a>
-                    <a href="https://artists.spotify.com/c/artist/3KeabuK2JtljSMRhYlcVBc/profile/overview" class="social-link" target="_blank" rel="noopener" aria-label="Spotify">🎶</a>
-                    <a href="https://music.apple.com/us/artist/jjj-b/1586552449" class="social-link" target="_blank" rel="noopener" aria-label="Apple Music">🍎</a>
-                    <a href="https://jjjb.bandcamp.com/" class="social-link" target="_blank" rel="noopener" aria-label="Bandcamp">🎪</a>
+                
+                <div class="footer-nav">
+                    <h4>Explore</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/music/">Music</a></li>
+                        <li><a href="/contact/">Contact</a></li>
+                    </ul>
                 </div>
-                <div class="footer-contact mb-4">
-                    <p>
-                        <a href="mailto:contact@azhang.eu.org">contact@azhang.eu.org</a>
-                    </p>
+
+                <div class="footer-platforms">
+                    <h4>Stream / Support</h4>
+                    <ul>
+                        <li><a href="https://open.spotify.com/artist/3KeabuK2JtljSMRhYlcVBc" target="_blank" rel="noopener">Spotify</a></li>
+                        <li><a href="https://jjjb.bandcamp.com/" target="_blank" rel="noopener">Bandcamp</a></li>
+                        <li><a href="https://music.apple.com/us/artist/jjj-b/1586552449" target="_blank" rel="noopener">Apple Music</a></li>
+                        <li><a href="https://www.youtube.com/@JJJB" target="_blank" rel="noopener">YouTube</a></li>
+                        <li><a href="https://www.instagram.com/az.azhang/" target="_blank" rel="noopener">Instagram</a></li>
+                    </ul>
                 </div>
-                <div class="footer-bottom">
-                    <p>&copy; 2025 JJJ_B. All rights reserved.</p>
+
+                <div class="footer-contact">
+                    <h4>Direct Connection</h4>
+                    <p>Inquiries / Collabs:</p>
+                    <a href="mailto:contact@azhang.eu.org" class="footer-email">contact@azhang.eu.org</a>
                 </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 JJJ_B. All rights reserved. Creative identity: azazhang.</p>
             </div>
         </div>
     </footer>
 
     <!-- ===== SCRIPTS ===== -->
+    <!-- Load music metadata catalog fallback database first -->
+    <script src="js/music-data.js"></script>
+    <!-- Main interactive logic script -->
     <script src="js/script.js"></script>
 </body>
-</html> 
+</html>

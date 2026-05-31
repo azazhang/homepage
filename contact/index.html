@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Contact JJJ_B - Get in touch for collaborations, bookings, licensing, and inquiries about electronic music projects and creative partnerships.">
-    <meta name="keywords" content="JJJ_B contact, electronic music collaboration, booking, licensing, music inquiries, independent artist, creative partnerships">
+    <meta name="keywords" content="JJJ_B contact, electronic music collaboration, booking, licensing, music inquiries, independent artist, creative partnerships, studio J, azazhang">
     <meta name="author" content="JJJ_B">
     
     <!-- Open Graph / Facebook -->
@@ -26,7 +26,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <!-- Stylesheets -->
     <link rel="stylesheet" href="../css/style.css">
@@ -34,7 +34,14 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="../images/head_portrait_new.png">
 </head>
-<body>
+<body class="light-theme">
+
+    <!-- ===== DYNAMIC BACKGROUND ELEMENTS ===== -->
+    <canvas id="wave-canvas"></canvas>
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="ambient-glow glow-3"></div>
+
     <!-- ===== HEADER & NAVIGATION ===== -->
     <header class="header">
         <nav class="nav container">
@@ -54,46 +61,48 @@
 
     <!-- ===== MAIN CONTENT ===== -->
     <main>
+        
         <!-- ===== PAGE HERO ===== -->
-        <section class="section" style="padding-top: 120px;">
+        <section class="section" style="padding-top: 140px; padding-bottom: 60px;">
             <div class="container">
                 <div class="text-center mb-5 fade-in">
+                    <span class="artist-badge">✉️ Inquiries</span>
                     <h1>Get In Touch</h1>
-                    <p class="hero-subtitle">Let's create something amazing together</p>
+                    <p class="hero-subtitle">Let's create something electronic and unique together.</p>
                 </div>
             </div>
         </section>
 
         <!-- ===== CONTACT CONTENT ===== -->
-        <section class="section-sm">
+        <section class="section-sm" style="padding-top: 0;">
             <div class="container">
                 <div class="grid grid-2 fade-in">
+                    
                     <!-- ===== CONTACT FORM ===== -->
-                    <div class="contact-form-section slide-in-left">
-                        <div class="card">
+                    <div class="contact-form-section">
+                        <div class="card glass-panel-form">
                             <div class="card-content">
                                 <h2 class="card-title">Send a Message</h2>
-                                <p class="card-text">
-                                    Whether you're interested in collaborations, bookings, licensing, or just want to connect about music, I'd love to hear from you.
+                                <p class="card-text mb-4">
+                                    Whether you're interested in collaborations, bookings, licensing, or just want to connect about music vlogs, feel free to write.
                                 </p>
                                 
                                 <form class="contact-form" id="contactForm" action="#" method="GET">
                                     <div class="form-group">
                                         <label for="name" class="form-label">Name *</label>
-                                        <input type="text" id="name" name="name" class="form-input" required>
+                                        <input type="text" id="name" name="name" class="form-input" required placeholder="Your name">
                                     </div>
                                     
                                     <div class="form-group">
                                         <label for="email" class="form-label">Email *</label>
-                                        <input type="email" id="email" name="email" class="form-input" required>
+                                        <input type="email" id="email" name="email" class="form-input" required placeholder="your.email@domain.com">
                                     </div>
                                     
                                     <div class="form-group">
                                         <label for="subject" class="form-label">Subject *</label>
                                         <select id="subject" name="subject" class="form-input" required>
-                                            <option value="">Select a subject</option>
+                                            <option value="">Select an inquiry type</option>
                                             <option value="collaboration">Collaboration Inquiry</option>
-                                            <option value="booking">Booking & Performance</option>
                                             <option value="licensing">Music Licensing</option>
                                             <option value="remix">Remix Request</option>
                                             <option value="label">Label Interest</option>
@@ -104,7 +113,7 @@
                                     
                                     <div class="form-group">
                                         <label for="message" class="form-label">Message *</label>
-                                        <textarea id="message" name="message" class="form-textarea" rows="6" placeholder="Tell me about your project or inquiry..." required></textarea>
+                                        <textarea id="message" name="message" class="form-textarea" rows="6" placeholder="Describe your project, ideas, or inquiry here..." required></textarea>
                                     </div>
                                     
                                     <button type="submit" class="btn btn-primary">
@@ -115,79 +124,48 @@
                         </div>
                     </div>
                     
-                    <!-- ===== CONTACT INFO & SOCIAL ===== -->
-                    <div class="contact-info-section slide-in-right">
-                        <!-- ===== DIRECT CONTACT ===== -->
-                        <div class="contact-card card scale-in">
+                    <!-- ===== CONTACT INFO & COLLAB OPPORTUNITIES ===== -->
+                    <div class="contact-info-section">
+                        <!-- Direct Contact Card -->
+                        <div class="contact-card card glass-panel">
                             <div class="card-content">
                                 <h3 class="card-title">📧 Direct Contact</h3>
                                 <p class="card-text">
-                                    For immediate inquiries or time-sensitive opportunities:
+                                    For direct inquiries, booking details, or time-sensitive projects:
                                 </p>
                                 <div class="contact-detail">
                                     <strong>Email:</strong>
                                     <a href="mailto:contact@azhang.eu.org" class="contact-link">contact@azhang.eu.org</a>
                                 </div>
                                 <div class="contact-detail">
-                                    <strong>Response Time:</strong>
+                                    <strong>Response window:</strong>
                                     <span>Usually within 24-48 hours</span>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- ===== STREAMING PLATFORMS ===== -->
-                        <div class="streaming-card card scale-in">
+                        <!-- Collab Capabilities -->
+                        <div class="collab-card card glass-panel mt-4">
                             <div class="card-content">
-                                <h3 class="card-title">🎵 Stream My Music</h3>
-                                <p class="card-text">
-                                    Find my latest electronic compositions on all major platforms:
-                                </p>
-                                <div class="platform-grid">
-                                    <a href="https://artists.spotify.com/c/artist/3KeabuK2JtljSMRhYlcVBc/profile/overview" class="platform-card" target="_blank" rel="noopener">
-                                        <span class="platform-icon">🎵</span>
-                                        <span class="platform-name">Spotify</span>
-                                    </a>
-                                    <a href="https://music.apple.com/us/artist/jjj-b/1586552449" class="platform-card" target="_blank" rel="noopener">
-                                        <span class="platform-icon">🍎</span>
-                                        <span class="platform-name">Apple Music</span>
-                                    </a>
-                                    <a href="https://jjjb.bandcamp.com/" class="platform-card" target="_blank" rel="noopener">
-                                        <span class="platform-icon">🎪</span>
-                                        <span class="platform-name">Bandcamp</span>
-                                    </a>
-                                    <a href="https://www.youtube.com/@JJJB" class="platform-card" target="_blank" rel="noopener">
-                                        <span class="platform-icon">📺</span>
-                                        <span class="platform-name">YouTube</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- ===== COLLABORATION TYPES ===== -->
-                        <div class="collab-card card scale-in">
-                            <div class="card-content">
-                                <h3 class="card-title">🤝 Collaboration Opportunities</h3>
+                                <h3 class="card-title">🤝 Collaborative Focus</h3>
                                 <div class="collab-types">
                                     <div class="collab-item">
-                                        <h4>🎛️ Electronic Production</h4>
-                                        <p>Original compositions, production work, and electronic music creation</p>
+                                        <h4>🎛️ Electronic Co-Production</h4>
+                                        <p>Original tracks, sound design, soundscapes, and synth programming.</p>
                                     </div>
                                     <div class="collab-item">
-                                        <h4>🔄 Remixes & Reworks</h4>
-                                        <p>Reimagining existing tracks with electronic elements and innovative production</p>
+                                        <h4>🔄 Remix Projects</h4>
+                                        <p>Reimagining vocal tracks or instrumental tracks into electronic/ambient versions.</p>
                                     </div>
                                     <div class="collab-item">
-                                        <h4>🎪 Live Performances</h4>
-                                        <p>Electronic live sets, festival appearances, and intimate venue performances</p>
-                                    </div>
-                                    <div class="collab-item">
-                                        <h4>💿 Label Partnerships</h4>
-                                        <p>Release opportunities, label collaborations, and distribution partnerships</p>
+                                        <h4>💿 Label & Distribution</h4>
+                                        <p>Seeking partnerships that respect artistic independence and creative freedom.</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </section>
@@ -199,61 +177,43 @@
         <section class="section-sm">
             <div class="container">
                 <div class="text-center mb-5 fade-in">
-                    <h2>Frequently Asked Questions</h2>
-                    <p>Quick answers to common inquiries</p>
+                    <h2 class="section-title">Frequently Asked Questions</h2>
+                    <p class="section-desc">Quick answers about my music, process, and licensing policies</p>
                 </div>
                 
                 <div class="faq-grid grid grid-2 fade-in">
-                    <div class="faq-item card slide-in-left">
+                    <div class="faq-item card glass-panel">
                         <div class="card-content">
-                            <h3 class="faq-question">🎵 Can I license your music for my project?</h3>
+                            <h3 class="faq-question">🎵 Can I license your tracks for film/games?</h3>
                             <p class="faq-answer">
-                                Absolutely! I'm open to licensing my electronic compositions for films, commercials, games, and other creative projects. Please contact me with details about your project and usage requirements.
+                                Yes. I am fully independent and own all sync/master rights to my discography. Please drop me an email stating your project details, and I can arrange licensing options.
                             </p>
                         </div>
                     </div>
                     
-                    <div class="faq-item card scale-in">
+                    <div class="faq-item card glass-panel">
                         <div class="card-content">
-                            <h3 class="faq-question">🤝 Do you accept collaboration requests?</h3>
+                            <h3 class="faq-question">🤝 How do we coordinate a collaboration?</h3>
                             <p class="faq-answer">
-                                Yes! I'm always interested in collaborating with other electronic artists, vocalists, and creative minds. Send me your ideas and let's explore what we can create together.
+                                Shoot me an email detailing your background, links to your current work, and what you have in mind. I love combining electronic synths with interesting organic elements and vocal drafts.
                             </p>
                         </div>
                     </div>
                     
-                    <div class="faq-item card slide-in-right">
+                    <div class="faq-item card glass-panel">
                         <div class="card-content">
-                            <h3 class="faq-question">🎪 Do you perform live?</h3>
+                            <h3 class="faq-question">🎥 Do you accept video sponsorship or joint vlogs?</h3>
                             <p class="faq-answer">
-                                While I don't typically perform live, I focus on creating performance videos that showcase my music-making process. You can watch these on my YouTube and Bilibili channels to experience how I create my compositions.
+                                I am open to reviewing gear vlogs, synth showcase collaborations, and joint tutorials for YouTube (Studio J) and Bilibili, provided they align with high-quality synthesizer craft.
                             </p>
                         </div>
                     </div>
                     
-                    <div class="faq-item card scale-in">
+                    <div class="faq-item card glass-panel">
                         <div class="card-content">
-                            <h3 class="faq-question">🔄 Can you remix my track?</h3>
+                            <h3 class="faq-question">🔄 Can I download stems for remixing?</h3>
                             <p class="faq-answer">
-                                I consider remix requests on a case-by-case basis. Please send me the original track, stems (if available), and details about your vision for the remix.
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div class="faq-item card slide-in-left">
-                        <div class="card-content">
-                            <h3 class="faq-question">📧 How quickly do you respond to emails?</h3>
-                            <p class="faq-answer">
-                                I typically respond to all inquiries within 24-48 hours. For urgent matters, please indicate the time-sensitive nature in your subject line.
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div class="faq-item card slide-in-right">
-                        <div class="card-content">
-                            <h3 class="faq-question">💿 Are you signed to a label?</h3>
-                            <p class="faq-answer">
-                                I currently operate as a fully independent artist, maintaining complete creative control over my music. However, I remain open to interesting collaboration opportunities and label partnerships that align with my artistic vision.
+                                I occasionally release stems on my Bandcamp page for community remix events. For specific song requests, send a message explaining your plans.
                             </p>
                         </div>
                     </div>
@@ -263,35 +223,51 @@
     </main>
 
     <!-- ===== FOOTER ===== -->
-    <footer class="footer section-sm">
+    <footer class="footer section">
         <div class="container">
-            <div class="footer-content text-center">
-                <div class="footer-logo mb-3">
-                    <h3>JJJ_B</h3>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3 class="footer-logo">JJJ_B</h3>
+                    <p class="footer-tagline">Independent electronic & ambient composition.</p>
                 </div>
-                <p class="footer-description mb-4">
-                    Creating innovative electronic music experiences through cutting-edge production and artistic vision.
-                </p>
-                <div class="social-links mb-4">
-                    <!-- Real Social Media Links -->
-                    <a href="https://www.youtube.com/@JJJB" class="social-link" target="_blank" rel="noopener" aria-label="YouTube">📺</a>
-                    <a href="https://artists.spotify.com/c/artist/3KeabuK2JtljSMRhYlcVBc/profile/overview" class="social-link" target="_blank" rel="noopener" aria-label="Spotify">🎶</a>
-                    <a href="https://music.apple.com/us/artist/jjj-b/1586552449" class="social-link" target="_blank" rel="noopener" aria-label="Apple Music">🍎</a>
-                    <a href="https://jjjb.bandcamp.com/" class="social-link" target="_blank" rel="noopener" aria-label="Bandcamp">🎪</a>
+                
+                <div class="footer-nav">
+                    <h4>Explore</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/music/">Music</a></li>
+                        <li><a href="/contact/">Contact</a></li>
+                    </ul>
                 </div>
-                <div class="footer-contact mb-4">
-                    <p>
-                        <a href="mailto:contact@azhang.eu.org">contact@azhang.eu.org</a>
-                    </p>
+
+                <div class="footer-platforms">
+                    <h4>Stream / Support</h4>
+                    <ul>
+                        <li><a href="https://open.spotify.com/artist/3KeabuK2JtljSMRhYlcVBc" target="_blank" rel="noopener">Spotify</a></li>
+                        <li><a href="https://jjjb.bandcamp.com/" target="_blank" rel="noopener">Bandcamp</a></li>
+                        <li><a href="https://music.apple.com/us/artist/jjj-b/1586552449" target="_blank" rel="noopener">Apple Music</a></li>
+                        <li><a href="https://www.youtube.com/@JJJB" target="_blank" rel="noopener">YouTube</a></li>
+                        <li><a href="https://www.instagram.com/az.azhang/" target="_blank" rel="noopener">Instagram</a></li>
+                    </ul>
                 </div>
-                <div class="footer-bottom">
-                    <p>&copy; 2025 JJJ_B. All rights reserved.</p>
+
+                <div class="footer-contact">
+                    <h4>Direct Connection</h4>
+                    <p>Inquiries / Collabs:</p>
+                    <a href="mailto:contact@azhang.eu.org" class="footer-email">contact@azhang.eu.org</a>
                 </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 JJJ_B. All rights reserved. Creative identity: azazhang.</p>
             </div>
         </div>
     </footer>
 
     <!-- ===== SCRIPTS ===== -->
+    <!-- Load fallback database -->
+    <script src="../js/music-data.js"></script>
+    <!-- Load interactive controller script -->
     <script src="../js/script.js"></script>
 </body>
-</html> 
+</html>
