@@ -1,6 +1,13 @@
 // ===== JJJ_B INTERACTIVE MUSIC STUDIO SCRIPT =====
 // Modern, high-performance vanilla JavaScript for Alabaster Synth
 
+// Global state for dial knob values to prevent layout thrashing (getComputedStyle) in 60fps loops
+const knobState = {
+  glow: 0.5,       // Ranges 0.0 to 1.0 (default 50%)
+  speed: 0.5,      // Ranges 0.0 to 1.0 (default 50%)
+  compressor: 0.6  // Ranges 0.0 to 1.0 (default 60%)
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   // ===== CORE INITIALIZATION =====
   initNavigation();
@@ -175,15 +182,9 @@ function initBackgroundCanvas() {
     state.mouse.x += (state.mouse.targetX - state.mouse.x) * 0.05;
     state.mouse.y += (state.mouse.targetY - state.mouse.y) * 0.05;
 
-    // Load custom dial knob variables from CSS custom properties
-    const style = getComputedStyle(document.documentElement);
-    const knobGlowVal = parseFloat(style.getPropertyValue('--glow-strength') || '1.0');
-    const knobSpeedVal = parseFloat(style.getPropertyValue('--visualizer-speed') || '1.0');
-    const knobCompressVal = parseFloat(style.getPropertyValue('--compressor-val') || '0.6');
-
-    state.colorAlpha = 0.08 + (knobGlowVal * 0.22); // knob glow changes line opacity (ranges 8% to 30%)
-    state.speedScale = 0.3 + (knobSpeedVal * 2.0);   // knob speed changes wave frequency
-    state.amplitudeScale = 0.2 + (knobCompressVal * 2.2); // knob compressor changes amplitude
+    state.colorAlpha = 0.08 + (knobState.glow * 0.22); // knob glow changes line opacity (ranges 8% to 30%)
+    state.speedScale = 0.3 + (knobState.speed * 2.0);   // knob speed changes wave frequency
+    state.amplitudeScale = 0.2 + (knobState.compressor * 2.2); // knob compressor changes amplitude
 
     state.time += 0.005 * state.speedScale;
 
@@ -287,6 +288,11 @@ function initHardwareKnobs(bgVisualizer) {
       const mappedVal = percent; // map to 0.0 - 1.0 range
       document.documentElement.style.setProperty(propName, mappedVal.toString());
 
+      // Update in-memory state to avoid layout thrashing
+      if (knob.id === 'knob-glow') knobState.glow = percent;
+      if (knob.id === 'knob-speed') knobState.speed = percent;
+      if (knob.id === 'knob-eq') knobState.compressor = percent;
+
       // If active, update background canvas
       if (bgVisualizer) bgVisualizer.updateKnobValues();
     });
@@ -318,6 +324,12 @@ function initHardwareKnobs(bgVisualizer) {
       if (needle) needle.style.transform = `rotate(${angle}deg)`;
       const mappedVal = percent;
       document.documentElement.style.setProperty(propName, mappedVal.toString());
+      
+      // Update in-memory state to avoid layout thrashing
+      if (knob.id === 'knob-glow') knobState.glow = percent;
+      if (knob.id === 'knob-speed') knobState.speed = percent;
+      if (knob.id === 'knob-eq') knobState.compressor = percent;
+
       if (bgVisualizer) bgVisualizer.updateKnobValues();
     });
 
@@ -672,10 +684,8 @@ function startScreenVisualizer() {
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Read Compressor knob dial multiplier
-    const style = getComputedStyle(document.documentElement);
-    const compressorVal = parseFloat(style.getPropertyValue('--compressor-val') || '0.6');
-    const scaleFactor = 0.4 + (compressorVal * 1.3);
+    // Read Compressor knob dial multiplier from high-performance JS state
+    const scaleFactor = 0.4 + (knobState.compressor * 1.3);
 
     const barWidth = canvas.width / barsCount;
     let totalHeight = 0;
