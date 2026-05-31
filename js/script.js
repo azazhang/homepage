@@ -27,17 +27,30 @@ function initNavigation() {
   const navLinkItems = document.querySelectorAll('.nav-link');
   const header = document.querySelector('.header');
 
+  // Create overlay element dynamically if it doesn't exist
+  let navOverlay = document.querySelector('.nav-overlay');
+  if (!navOverlay) {
+    navOverlay = document.createElement('div');
+    navOverlay.className = 'nav-overlay';
+    document.body.appendChild(navOverlay);
+  }
+
   if (mobileToggle && navLinks) {
-    mobileToggle.addEventListener('click', () => {
+    const toggleMenu = () => {
       mobileToggle.classList.toggle('active');
       navLinks.classList.toggle('active');
+      navOverlay.classList.toggle('active');
       document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
-    });
+    };
+
+    mobileToggle.addEventListener('click', toggleMenu);
+    navOverlay.addEventListener('click', toggleMenu);
 
     navLinkItems.forEach(link => {
       link.addEventListener('click', () => {
         mobileToggle.classList.remove('active');
         navLinks.classList.remove('active');
+        navOverlay.classList.remove('active');
         document.body.style.overflow = '';
       });
     });
@@ -123,7 +136,12 @@ function initBackgroundCanvas() {
     time: 0
   };
 
+  let lastWidth = window.innerWidth;
   function resize() {
+    // Only resize if the width actually changed (prevents iOS address bar resize visual flicker)
+    if (window.innerWidth === lastWidth && canvas.width > 0) return;
+    lastWidth = window.innerWidth;
+
     state.width = window.innerWidth;
     state.height = window.innerHeight;
     canvas.width = state.width;
@@ -717,6 +735,7 @@ function initContactForm() {
       statusDiv.id = 'form-status';
       form.appendChild(statusDiv);
     }
+    statusDiv.style.display = 'block';
 
     try {
       window.location.href = mailtoLink;
