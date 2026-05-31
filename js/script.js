@@ -136,7 +136,7 @@ function initBackgroundCanvas() {
     time: 0
   };
 
-  let lastWidth = window.innerWidth;
+  let lastWidth = 0;
   function resize() {
     // Only resize if the width actually changed (prevents iOS address bar resize visual flicker)
     if (window.innerWidth === lastWidth && canvas.width > 0) return;
@@ -156,8 +156,15 @@ function initBackgroundCanvas() {
     state.mouse.targetY = e.clientY;
   });
 
+  let lastFrameTime = 0;
   // Main render loop
-  function draw() {
+  function draw(timestamp) {
+    animationFrameId = requestAnimationFrame(draw);
+
+    // Throttle to ~30 FPS to optimize GPU rendering and battery
+    if (timestamp && timestamp - lastFrameTime < 33) return;
+    if (timestamp) lastFrameTime = timestamp;
+
     ctx.clearRect(0, 0, state.width, state.height);
 
     // Damping mouse position
@@ -180,8 +187,6 @@ function initBackgroundCanvas() {
     drawWave(2, 100, 0.001, state.colorAlpha, '#A855F7'); // Purple
     drawWave(3, 70, 0.0015, state.colorAlpha * 0.8, '#06B6D4'); // Teal
     drawWave(1.5, 140, 0.0008, state.colorAlpha * 0.5, '#EC4899'); // Pink
-
-    animationFrameId = requestAnimationFrame(draw);
   }
 
   function drawWave(frequencyScale, baseAmplitude, density, opacity, color) {
@@ -197,7 +202,8 @@ function initBackgroundCanvas() {
     ctx.lineWidth = 3.5;
     ctx.globalAlpha = opacity;
 
-    for (let x = 0; x < state.width; x += 10) {
+    // Increased step to 20 for CPU/GPU efficiency (halves geometry path processing)
+    for (let x = 0; x < state.width; x += 20) {
       const angle = (x * density * frequencyScale) + state.time + freqOffset;
       // Core wave calculation
       const waveVal = Math.sin(angle) * baseAmplitude * state.amplitudeScale;
