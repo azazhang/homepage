@@ -125,6 +125,10 @@ function initBackgroundCanvas() {
   const ctx = canvas.getContext('2d');
   let animationFrameId;
 
+  // Option A: Render at a lower resolution scale to significantly reduce GPU pixel fill-rate load.
+  // Stretched back to 100vw/100vh using CSS, this cuts drawing computations by 75%.
+  const resolutionScale = 0.5;
+
   // State tracker
   const state = {
     width: 0,
@@ -142,8 +146,8 @@ function initBackgroundCanvas() {
     if (window.innerWidth === lastWidth && canvas.width > 0) return;
     lastWidth = window.innerWidth;
 
-    state.width = window.innerWidth;
-    state.height = window.innerHeight;
+    state.width = Math.floor(window.innerWidth * resolutionScale);
+    state.height = Math.floor(window.innerHeight * resolutionScale);
     canvas.width = state.width;
     canvas.height = state.height;
   }
@@ -152,8 +156,8 @@ function initBackgroundCanvas() {
 
   // Hover tracking
   window.addEventListener('mousemove', (e) => {
-    state.mouse.targetX = e.clientX;
-    state.mouse.targetY = e.clientY;
+    state.mouse.targetX = e.clientX * resolutionScale;
+    state.mouse.targetY = e.clientY * resolutionScale;
   });
 
   let lastFrameTime = 0;
@@ -199,16 +203,18 @@ function initBackgroundCanvas() {
     const freqOffset = (state.mouse.x / state.width) * 0.002;
 
     ctx.strokeStyle = color;
-    ctx.lineWidth = 3.5;
+    ctx.lineWidth = 3.5 * resolutionScale; // scale the line width to display perfectly on-screen
     ctx.globalAlpha = opacity;
 
-    // Increased step to 20 for CPU/GPU efficiency (halves geometry path processing)
-    for (let x = 0; x < state.width; x += 20) {
-      const angle = (x * density * frequencyScale) + state.time + freqOffset;
-      // Core wave calculation
-      const waveVal = Math.sin(angle) * baseAmplitude * state.amplitudeScale;
+    // Smooth drawing step size (in canvas pixels)
+    const step = 10;
+
+    for (let x = 0; x < state.width; x += step) {
+      const angle = (x * (density / resolutionScale) * frequencyScale) + state.time + freqOffset;
+      // Core wave calculation (scaled by resolutionScale to look identical on-screen)
+      const waveVal = Math.sin(angle) * (baseAmplitude * resolutionScale) * state.amplitudeScale;
       // Scroll-wave factor
-      const scrollFactor = Math.sin(x * 0.005 + state.time) * 15;
+      const scrollFactor = Math.sin(x * (0.005 / resolutionScale) + state.time) * (15 * resolutionScale);
       const y = midY + waveVal + warpOffset + scrollFactor;
 
       if (x === 0) {

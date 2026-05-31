@@ -1279,6 +1279,7 @@ a {
 }
 
 .play-overlay-icon {
+  position: absolute;
   font-size: var(--font-size-lg);
   color: #fff;
   z-index: 2;
