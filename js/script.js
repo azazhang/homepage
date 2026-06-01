@@ -25,6 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize contact form handler
   initContactForm();
+
+  // Initialize viewport observers to pause off-screen CSS animations
+  initViewportObservers();
 });
 
 // ===== MOBILE DRAWER NAVIGATION =====
@@ -126,115 +129,161 @@ function initScrollToTop() {
 
 // ===== INTERACTIVE BACKGROUND CANVAS WAVES =====
 function initBackgroundCanvas() {
-  const canvas = document.getElementById('wave-canvas');
-  if (!canvas) return null;
+  const bg = document.getElementById('wave-background');
+  if (!bg) return null;
 
-  const ctx = canvas.getContext('2d');
-  let animationFrameId;
+  const pathPurple = document.getElementById('wave-path-purple');
+  const pathTeal = document.getElementById('wave-path-teal');
+  const pathPink = document.getElementById('wave-path-pink');
 
-  // Option A: Render at a lower resolution scale to significantly reduce GPU pixel fill-rate load.
-  // Stretched back to 100vw/100vh using CSS, this cuts drawing computations by 75%.
-  const resolutionScale = 0.5;
-
-  // State tracker
-  const state = {
-    width: 0,
-    height: 0,
-    mouse: { x: 0, y: 0, targetX: 0, targetY: 0 },
-    speedScale: 1.0,
-    amplitudeScale: 1.0,
-    colorAlpha: 0.07,
-    time: 0
-  };
-
-  let lastWidth = 0;
-  function resize() {
-    // Only resize if the width actually changed (prevents iOS address bar resize visual flicker)
-    if (window.innerWidth === lastWidth && canvas.width > 0) return;
-    lastWidth = window.innerWidth;
-
-    state.width = Math.floor(window.innerWidth * resolutionScale);
-    state.height = Math.floor(window.innerHeight * resolutionScale);
-    canvas.width = state.width;
-    canvas.height = state.height;
+  // Pre-generate periodic wave paths (period of 2000px, tiling to 6000px)
+  function generateWavePath(amplitude, phase, waveLength = 2000, totalLength = 6000) {
+    let points = [];
+    const midY = 300; // viewBox height is 600
+    const step = 40;  // 40px step reduces vertex count while maintaining organic smoothness
+    for (let x = 0; x <= totalLength; x += step) {
+      const k1 = 2 * Math.PI / waveLength;
+      const k2 = 4 * Math.PI / waveLength;
+      const k3 = 6 * Math.PI / waveLength;
+      
+      const y = midY + 
+                amplitude * Math.sin(k1 * x + phase) +
+                (amplitude * 0.45) * Math.sin(k2 * x + phase * 1.5) +
+                (amplitude * 0.2) * Math.sin(k3 * x + phase * 2.5);
+                
+      points.push(`${x.toFixed(1)},${y.toFixed(1)}`);
+    }
+    return 'M ' + points.join(' L ');
   }
-  resize();
-  window.addEventListener('resize', resize);
 
-  // Hover tracking
+  if (pathPurple) pathPurple.setAttribute('d', generateWavePath(80, 0, 2000, 6000));
+  if (pathTeal) pathTeal.setAttribute('d', generateWavePath(55, 2.0, 2000, 6000));
+  if (pathPink) pathPink.setAttribute('d', generateWavePath(100, 4.0, 2000, 6000));
+
+  // Parallax handling with CSS variables
   window.addEventListener('mousemove', (e) => {
-    state.mouse.targetX = e.clientX * resolutionScale;
-    state.mouse.targetY = e.clientY * resolutionScale;
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    const moveX = (e.clientX - centerX) / centerX;
+    const moveY = (e.clientY - centerY) / centerY;
+    
+    // Smooth translation offsets
+    const tx = -moveX * 40;
+    const ty = -moveY * 30;
+    
+    bg.style.setProperty('--mouse-x', `${tx}px`);
+    bg.style.setProperty('--mouse-y', `${ty}px`);
   });
 
-  let lastFrameTime = 0;
-  // Main render loop
-  function draw(timestamp) {
-    animationFrameId = requestAnimationFrame(draw);
+  // IntersectionObserver to pause the infinite animations when offscreen
+  let isHeroVisible = true;
+  let isConsoleVisible = false;
+  let isPaused = false;
+  let isIdle = false;
+  let intervalId = null;
 
-    // Throttle to ~30 FPS to optimize GPU rendering and battery
-    if (timestamp && timestamp - lastFrameTime < 33) return;
-    if (timestamp) lastFrameTime = timestamp;
+  let offsetPurple = 0;
+  let offsetTeal = -2000;
+  let offsetPink = 0;
 
-    ctx.clearRect(0, 0, state.width, state.height);
+  function updateOffsets() {
+    const speedMultiplier = 0.3 + (knobState.speed * 2.0); // 0.3 to 2.3
 
-    // Damping mouse position
-    state.mouse.x += (state.mouse.targetX - state.mouse.x) * 0.05;
-    state.mouse.y += (state.mouse.targetY - state.mouse.y) * 0.05;
+    // Update positions based on direction and speed mapping
+    offsetPurple -= 0.8 * speedMultiplier;
+    if (offsetPurple <= -2000) offsetPurple += 2000;
 
-    state.colorAlpha = 0.08 + (knobState.glow * 0.22); // knob glow changes line opacity (ranges 8% to 30%)
-    state.speedScale = 0.3 + (knobState.speed * 2.0);   // knob speed changes wave frequency
-    state.amplitudeScale = 0.2 + (knobState.compressor * 2.2); // knob compressor changes amplitude
+    offsetTeal += 1.1 * speedMultiplier;
+    if (offsetTeal >= 0) offsetTeal -= 2000;
 
-    state.time += 0.005 * state.speedScale;
+    offsetPink -= 0.6 * speedMultiplier;
+    if (offsetPink <= -2000) offsetPink += 2000;
 
-    // Draw three stacked sine waves (higher base amplitude for visibility)
-    drawWave(2, 100, 0.001, state.colorAlpha, '#A855F7'); // Purple
-    drawWave(3, 70, 0.0015, state.colorAlpha * 0.8, '#06B6D4'); // Teal
-    drawWave(1.5, 140, 0.0008, state.colorAlpha * 0.5, '#EC4899'); // Pink
+    bg.style.setProperty('--wave-offset-purple', `${offsetPurple.toFixed(1)}px`);
+    bg.style.setProperty('--wave-offset-teal', `${offsetTeal.toFixed(1)}px`);
+    bg.style.setProperty('--wave-offset-pink', `${offsetPink.toFixed(1)}px`);
   }
 
-  function drawWave(frequencyScale, baseAmplitude, density, opacity, color) {
-    ctx.save();
-    ctx.beginPath();
-
-    const midY = state.height / 2;
-    // Mouse warp factor
-    const warpOffset = (state.mouse.y - midY) * 0.15;
-    const freqOffset = (state.mouse.x / state.width) * 0.002;
-
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 3.5 * resolutionScale; // scale the line width to display perfectly on-screen
-    ctx.globalAlpha = opacity;
-
-    // Smooth drawing step size (in canvas pixels)
-    const step = 10;
-
-    for (let x = 0; x < state.width; x += step) {
-      const angle = (x * (density / resolutionScale) * frequencyScale) + state.time + freqOffset;
-      // Core wave calculation (scaled by resolutionScale to look identical on-screen)
-      const waveVal = Math.sin(angle) * (baseAmplitude * resolutionScale) * state.amplitudeScale;
-      // Scroll-wave factor
-      const scrollFactor = Math.sin(x * (0.005 / resolutionScale) + state.time) * (15 * resolutionScale);
-      const y = midY + waveVal + warpOffset + scrollFactor;
-
-      if (x === 0) {
-        ctx.moveTo(x, y);
-      } else {
-        ctx.lineTo(x, y);
-      }
+  function startLoop() {
+    if (!intervalId && !isPaused && !isIdle) {
+      // Run at exactly 30 FPS (33ms interval) to completely decouple from browser 120Hz RAF scheduling
+      intervalId = setInterval(updateOffsets, 33);
     }
-
-    ctx.stroke();
-    ctx.restore();
   }
 
-  draw();
+  function stopLoop() {
+    if (intervalId) {
+      clearInterval(intervalId);
+      intervalId = null;
+    }
+  }
+
+  const visibilityObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.target.id === 'hero') {
+        isHeroVisible = entry.isIntersecting;
+      } else if (entry.target.id === 'console') {
+        isConsoleVisible = entry.isIntersecting;
+      }
+    });
+
+    const shouldAnimate = isHeroVisible || isConsoleVisible;
+    isPaused = !shouldAnimate;
+    if (shouldAnimate) {
+      startLoop();
+    } else {
+      stopLoop();
+    }
+  }, { threshold: 0 });
+
+  const heroSec = document.getElementById('hero');
+  const consoleSec = document.getElementById('console');
+  if (heroSec) visibilityObserver.observe(heroSec);
+  if (consoleSec) visibilityObserver.observe(consoleSec);
+
+  // High-performance CSS updates for knob state modifications
+  function updateKnobValues() {
+    const compressorVal = 0.2 + (knobState.compressor * 2.2);
+    const glowStrength = knobState.glow;
+
+    bg.style.setProperty('--compressor-val', compressorVal);
+    bg.style.setProperty('--glow-strength', glowStrength);
+  }
+
+  // Set initial knob values on load
+  updateKnobValues();
+
+  // High-performance inactivity timer to pause background animations when idle
+  let inactivityTimer = null;
+  const INACTIVITY_LIMIT = 20000; // 20 seconds of no interaction
+
+  function resetInactivityTimer() {
+    const wasIdle = isIdle;
+    isIdle = false;
+    
+    if (wasIdle) {
+      startLoop();
+    }
+    
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(() => {
+      isIdle = true;
+      stopLoop();
+    }, INACTIVITY_LIMIT);
+  }
+
+  // Monitor interactions to reset idle timer
+  window.addEventListener('mousemove', resetInactivityTimer);
+  window.addEventListener('scroll', resetInactivityTimer, { passive: true });
+  window.addEventListener('click', resetInactivityTimer);
+  window.addEventListener('touchstart', resetInactivityTimer, { passive: true });
+
+  // Initialize the loop and timer on load
+  resetInactivityTimer();
+  startLoop();
 
   return {
-    updateKnobValues: () => {
-      // Prompt CSS refresh triggers automatically
-    }
+    updateKnobValues
   };
 }
 
@@ -658,7 +707,6 @@ function initMusicSync() {
 }
 
 // ===== CRT SCREEN EQUALIZER WAVEFORM =====
-let visualizerInterval = null;
 function startScreenVisualizer() {
   const canvas = document.getElementById('console-visualizer-canvas');
   if (!canvas) return;
@@ -670,10 +718,6 @@ function startScreenVisualizer() {
   canvas.width = canvas.offsetWidth;
   canvas.height = canvas.offsetHeight;
 
-  if (visualizerInterval) {
-    cancelAnimationFrame(visualizerInterval);
-  }
-
   const barsCount = 28;
   const bars = Array.from({ length: barsCount }, () => ({
     targetHeight: Math.random() * canvas.height,
@@ -681,7 +725,11 @@ function startScreenVisualizer() {
     speed: 0.1 + Math.random() * 0.15
   }));
 
+  let animating = false;
+
   function animate() {
+    if (!animating) return; // Exit loop completely
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Read Compressor knob dial multiplier from high-performance JS state
@@ -725,10 +773,23 @@ function startScreenVisualizer() {
       }
     });
 
-    visualizerInterval = requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
   }
 
-  animate();
+  // Create observer to track visualizer visibility
+  const observer = new IntersectionObserver((entries) => {
+    const isVisible = entries[0].isIntersecting;
+    if (isVisible) {
+      if (!animating) {
+        animating = true;
+        animate();
+      }
+    } else {
+      animating = false;
+    }
+  }, { threshold: 0 });
+
+  observer.observe(canvas);
 }
 
 // ===== CONTACT FORM PATCH-BAY LINK =====
@@ -773,4 +834,33 @@ function initContactForm() {
       statusDiv.style.display = 'none';
     }, 8000);
   });
+}
+
+// ===== VIEWPORT ANIMATION PERFORMANCE OBSERVERS =====
+function initViewportObservers() {
+  // 1. Hero Section Observer (pauses neon rings rotation when out of view)
+  const heroSection = document.getElementById('hero');
+  if (heroSection) {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        document.body.classList.remove('hero-paused');
+      } else {
+        document.body.classList.add('hero-paused');
+      }
+    }, { threshold: 0 });
+    observer.observe(heroSection);
+  }
+
+  // 2. Console/Mixing Desk Section Observer (pauses vinyl spin when out of view)
+  const consoleSection = document.getElementById('console');
+  if (consoleSection) {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        document.body.classList.remove('console-paused');
+      } else {
+        document.body.classList.add('console-paused');
+      }
+    }, { threshold: 0 });
+    observer.observe(consoleSection);
+  }
 }

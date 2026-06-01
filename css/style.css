@@ -77,6 +77,12 @@
   --glow-strength: 1;
   --visualizer-speed: 1;
   --compressor-val: 0.6;
+
+  /* Glassmorphism Blurs (Reduce or set to 'none' to drastically lower GPU compositing overhead during animation) */
+  --blur-glass: blur(14px);
+  --blur-header: blur(12px);
+  --blur-gallery: blur(10px);
+  --blur-footer: blur(10px);
 }
 
 /* ===== BASE STYLES & RESET ===== */
@@ -118,7 +124,7 @@ body {
 }
 
 /* ===== DYNAMIC BACKGROUND VISUALS ===== */
-#wave-canvas {
+#wave-background {
   position: fixed;
   top: 0;
   left: 0;
@@ -131,7 +137,84 @@ body {
               radial-gradient(circle at 85% 80%, rgba(6, 182, 212, 0.05) 0%, transparent 45%),
               var(--color-bg-primary);
   background-attachment: fixed;
+  overflow: hidden;
 }
+
+#wave-parallax {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: translate3d(var(--mouse-x, 0px), var(--mouse-y, 0px), 0);
+  transition: transform 0.8s cubic-bezier(0.1, 0.8, 0.2, 1);
+  pointer-events: none;
+}
+
+.wave-container {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 6000px;
+  height: 600px;
+  margin-top: -300px;
+  transform: scaleY(var(--compressor-val, 1));
+  transform-origin: center;
+  pointer-events: none;
+}
+
+.wave-flow {
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+
+.wave-container.purple .wave-flow {
+  transform: translate3d(var(--wave-offset-purple, 0px), 0, 0);
+}
+
+.wave-container.teal .wave-flow {
+  transform: translate3d(var(--wave-offset-teal, -2000px), 0, 0);
+}
+
+.wave-container.pink .wave-flow {
+  transform: translate3d(var(--wave-offset-pink, 0px), 0, 0);
+}
+
+.wave-container.purple {
+  opacity: calc(0.08 + var(--glow-strength, 0) * 0.22);
+}
+
+.wave-container.teal {
+  opacity: calc((0.08 + var(--glow-strength, 0) * 0.22) * 0.8);
+}
+
+.wave-container.pink {
+  opacity: calc((0.08 + var(--glow-strength, 0) * 0.22) * 0.5);
+}
+
+.wave-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.wave-path {
+  stroke-width: 3.5px;
+}
+
+#wave-path-purple {
+  stroke: #A855F7;
+}
+
+#wave-path-teal {
+  stroke: #06B6D4;
+}
+
+#wave-path-pink {
+  stroke: #EC4899;
+}
+
 
 .ambient-glow {
   position: fixed;
@@ -139,8 +222,7 @@ body {
   filter: blur(140px);
   z-index: -2;
   pointer-events: none;
-  opacity: 0.16;
-  mix-blend-mode: multiply;
+  opacity: 0.08;
 }
 
 .glow-1 {
@@ -248,8 +330,8 @@ a {
   border: 1px solid var(--color-border-glass);
   border-radius: var(--radius-2xl);
   box-shadow: var(--shadow-md);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
   transition: transform var(--transition-slow), box-shadow var(--transition-base), border-color var(--transition-base);
 }
 
@@ -261,8 +343,8 @@ a {
   background: var(--color-bg-glass);
   border: 1px solid var(--color-border-glass);
   border-radius: var(--radius-2xl);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
   box-shadow: var(--shadow-sm);
   transition: transform var(--transition-slow), border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
@@ -362,8 +444,8 @@ a {
   right: 0;
   z-index: 100;
   background: rgba(250, 249, 246, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: var(--blur-header);
+  -webkit-backdrop-filter: var(--blur-header);
   border-bottom: 1px solid rgba(15, 23, 42, 0.04);
   transition: padding var(--transition-base), background var(--transition-base);
 }
@@ -616,6 +698,12 @@ a {
   100% { transform: rotate(360deg); }
 }
 
+/* Viewport performance toggles to freeze rotating animations off-screen */
+.hero-paused .neon-ring,
+.hero-paused .neon-ring::before {
+  animation-play-state: paused !important;
+}
+
 /* ===== HARDWARE MIXING CONSOLE PLAYER ===== */
 .hardware-console {
   display: grid;
@@ -753,6 +841,10 @@ a {
 .playing .vinyl-record {
   animation: spinVinyl 6s linear infinite;
   right: -35px;
+}
+
+.console-paused .vinyl-record {
+  animation-play-state: paused !important;
 }
 
 .playing .vinyl-sleeve {
@@ -1405,8 +1497,8 @@ a {
   right: 20px;
   padding: var(--space-md) var(--space-lg);
   background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: var(--blur-gallery);
+  -webkit-backdrop-filter: var(--blur-gallery);
   border: 1px solid var(--color-border-glass);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
@@ -1645,12 +1737,36 @@ a {
 }
 
 /* ===== CONTACT PAGE PATCH-BAY STYLES ===== */
+.card {
+  background: var(--color-bg-glass);
+  border: 1px solid var(--color-border-glass);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  transition: transform var(--transition-slow), box-shadow var(--transition-base), border-color var(--transition-base);
+}
+
+.card-content {
+  padding: var(--space-xl);
+}
+
+.glass-panel {
+  background: var(--color-bg-glass);
+  border: 1px solid var(--color-border-glass);
+  border-radius: var(--radius-2xl);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-slow), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
 .glass-panel-form {
   background: var(--color-bg-glass);
   border: 1px solid var(--color-border-glass);
   box-shadow: var(--shadow-md);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
 }
 
 .contact-form {
@@ -1817,8 +1933,8 @@ select.form-input {
 /* ===== FOOTER LAYOUT ===== */
 .footer {
   background: rgba(244, 243, 239, 0.45);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: var(--blur-footer);
+  -webkit-backdrop-filter: var(--blur-footer);
   border-top: 1px solid var(--color-bg-accent);
   padding: var(--space-3xl) 0 var(--space-xl);
 }
