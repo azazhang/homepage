@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive 12-Key Modulation Backing Track Practice Companion. Sync backing track playback to chord progression, fretboard scale patterns, and interactive Circle of Fifths.">
+    <meta name="keywords" content="12 key modulation, jazz fusion workout, backing track companion, circle of fifths, guitar fretboard visualizer, modal improvisation, scale practice">
+    <meta name="author" content="JJJ_B">
+    <title>Modulation Workout - Interactive Practice Companion | JJJ_B</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Global CSS Variables -->
+    <link rel="stylesheet" href="../css/style.css?v=2">
+    <!-- Subpage Workout specific styles -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../images/head_portrait_new.png">
+</head>
+<body class="light-theme workout-page">
+    
+    <!-- Ambient Glows -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="ambient-glow glow-3"></div>
+
+    <!-- ===== HEADER & NAVIGATION ===== -->
+    <header class="header">
+        <nav class="nav container">
+            <a href="/" class="logo">JJJ_B</a>
+            <ul class="nav-links">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/workout/" class="nav-link active">Workout</a></li>
+                <li><a href="/music/" class="nav-link">Music</a></li>
+                <li><a href="/contact/" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" aria-label="Toggle mobile menu">
+                <span class="hamburger"></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="container workout-container">
+        
+        <!-- Header Info -->
+        <div class="workout-header fade-in">
+            <h1 class="workout-title">12-Key Modulation Workout</h1>
+            <p class="workout-desc">Interactive improvisation companion synced to Circle of Fifths backing tracks. Click key segments on the wheel to seek the player, watch scales shift dynamically across the fretboard, and practice modal transitions.</p>
+        </div>
+
+        <!-- Dashboard / Control Center -->
+        <div class="control-center card fade-in">
+            <div class="control-row">
+                <!-- Mode Toggle -->
+                <div class="control-group">
+                    <span class="control-label">MODE</span>
+                    <div class="btn-toggle-group" id="mode-toggle">
+                        <button class="btn-toggle active" data-mode="minor">MINOR (i-iv-VII-III)</button>
+                        <button class="btn-toggle" data-mode="major">MAJOR (ii-V-I-VI7)</button>
+                    </div>
+                </div>
+
+                <!-- Tempo Selector -->
+                <div class="control-group">
+                    <span class="control-label">TEMPO</span>
+                    <div class="btn-toggle-group" id="tempo-toggle">
+                        <button class="btn-toggle active" data-tempo="slow">SLOW (80 BPM)</button>
+                        <button class="btn-toggle" data-tempo="medium">MEDIUM (100 BPM)</button>
+                        <button class="btn-toggle" data-tempo="fast">FAST (120 BPM)</button>
+                    </div>
+                </div>
+
+                <!-- Fretboard Labels Mode -->
+                <div class="control-group">
+                    <span class="control-label">FRETBOARD LABELS</span>
+                    <div class="btn-toggle-group" id="label-toggle">
+                        <button class="btn-toggle active" data-label="notes">NOTE NAMES</button>
+                        <button class="btn-toggle" data-label="intervals">INTERVALS</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle Section: Player, Chords, Circle of Fifths -->
+        <div class="workout-workspace">
+            
+            <!-- Left Side: YouTube Embed & Chord Sheet -->
+            <div class="workspace-left fade-in">
+                <!-- Video Card -->
+                <div class="video-card card">
+                    <div class="video-wrapper">
+                        <!-- Embedded YouTube Iframe will load here -->
+                        <div id="youtube-player"></div>
+                    </div>
+                    <!-- Player status bar -->
+                    <div class="player-status-bar">
+                        <span id="active-key-badge" class="badge">A Minor Center</span>
+                        <span id="player-time-display" class="time">00:00 / 00:00</span>
+                    </div>
+                </div>
+
+                <!-- Lead Sheet Card -->
+                <div class="leadsheet-card card">
+                    <div class="card-header-row">
+                        <h3 class="card-subtitle">Scrolling Lead Sheet</h3>
+                        <span id="bpm-display-label" class="bpm-label-indicator">80 BPM</span>
+                    </div>
+                    <div class="leadsheet-container">
+                        <!-- Active Key & Progressions -->
+                        <div class="leadsheet-scroller" id="chord-scroller">
+                            <!-- Populated by Javascript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Circle of Fifths SVG Controller -->
+            <div class="workspace-right fade-in">
+                <div class="circle-card card">
+                    <h3 class="card-subtitle text-center mb-3">Circle of Fifths Controller</h3>
+                    <div class="circle-wrapper">
+                        <!-- Interactive SVG Wheel -->
+                        <svg viewBox="0 0 500 500" class="circle-svg" id="circle-wheel">
+                            <defs>
+                                <radialGradient id="wheel-glow" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" stop-color="rgba(168, 85, 247, 0.08)" />
+                                    <stop offset="100%" stop-color="rgba(6, 182, 212, 0.02)" />
+                                </radialGradient>
+                            </defs>
+                            
+                            <!-- Outer Background Circle -->
+                            <circle cx="250" cy="250" r="230" fill="url(#wheel-glow)" stroke="var(--color-border-glass)" stroke-width="2" />
+                            
+                            <!-- sectors will be generated dynamically by JavaScript to prevent bloated static code -->
+                            <g id="wheel-sectors-group"></g>
+                            
+                            <!-- Inner circular cutout to make it a donut -->
+                            <circle cx="250" cy="250" r="100" fill="var(--color-bg-secondary)" stroke="var(--color-border-glass)" stroke-width="2" />
+                            
+                            <!-- Center label -->
+                            <g transform="translate(250, 250)">
+                                <text text-anchor="middle" y="-10" class="center-text-label" id="center-title-label">KEY CENTER</text>
+                                <text text-anchor="middle" y="25" class="center-text-active" id="center-active-label">A Min</text>
+                            </g>
+                        </svg>
+                    </div>
+                    <p class="circle-hint">💡 Segment highlights move clockwise matching the backing track modulation. Click any segment to jump directly to that key loop.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Bottom Section: Interactive Fretboard Visualizer -->
+        <div class="fretboard-row fade-in">
+            <div class="fretboard-card card">
+                <div class="fretboard-header">
+                    <div>
+                        <h3 class="card-subtitle mb-1">Dynamic Fretboard Scale Visualizer</h3>
+                        <p class="fretboard-desc">Showing <strong id="fretboard-scale-name">A Dorian Scale</strong> (relative to <strong id="fretboard-chord-name">Am9</strong> chord)</p>
+                    </div>
+                    <div class="legend">
+                        <span class="legend-item"><span class="legend-dot root-dot"></span> Root Note</span>
+                        <span class="legend-item"><span class="legend-dot chord-dot"></span> Chord Tone</span>
+                        <span class="legend-item"><span class="legend-dot scale-dot"></span> Scale Note</span>
+                    </div>
+                </div>
+
+                <div class="fretboard-scroll-container">
+                    <!-- Fretboard SVG container -->
+                    <div class="fretboard-wrapper">
+                        <svg viewBox="0 0 1200 240" class="fretboard-svg" id="guitar-fretboard">
+                            <!-- Generated by JS -->
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips & Resources -->
+        <div class="resources-grid fade-in">
+            <div class="card resource-card">
+                <div class="card-content">
+                    <h3 class="resource-title">💡 How to Practice</h3>
+                    <ul class="resource-list">
+                        <li><strong>Voice Leading:</strong> Since the modulation moves around the Circle of Fifths, adjacent key centers share 6 of their 7 notes. Focus on shifts of a single semitone when keys modulate!</li>
+                        <li><strong>Chord Arpeggios:</strong> Learn the chord tones for each key progression (e.g. 1-b3-5-b7-9 for minor 9th) to easily outline the harmony.</li>
+                        <li><strong>Scale Choices:</strong> Play Dorian over the minor 9th, Mixolydian over the dominant 13th, and Lydian/Ionian over the major 9th.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card resource-card">
+                <div class="card-content">
+                    <h3 class="resource-title">📂 Downloads & Support</h3>
+                    <p class="mb-4">Get high-fidelity stereo backing track WAVs, isolated audio stems (drums, bass, synth, pads), complete printable PDF practice charts, and MIDI compositions to load into your DAW.</p>
+                    <div class="action-buttons">
+                        <a href="https://jjjb.bandcamp.com/" target="_blank" class="btn btn-primary btn-sm">Get Album on Bandcamp</a>
+                        <a href="https://www.patreon.com/JJJ_B" target="_blank" class="btn btn-secondary btn-sm">Download Stems on Patreon</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="container footer-content">
+            <p>&copy; 2026 JJJ_B. Produced by azazhang. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- YouTube Iframe API Script -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <!-- Workout Application Script -->
+    <script src="app.js"></script>
+</body>
+</html>

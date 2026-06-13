@@ -4,6 +4,25 @@
 
 const musicData = [
   {
+    id: "1427564371",
+    title: "12-Key Jam Track Modulation Workouts (Circle of Fifths Practice Series)",
+    year: "2026",
+    genre: "Jazz Fusion / Practice Companion",
+    description: "A consolidated practice album of 12-key modulation backing tracks designed to develop fretboard fluency, modal improvisation, and voice leading around the Circle of Fifths. Features slow, medium, and fast workouts for both Major and Minor key cycles.",
+    bandcampUrl: "https://jjjb.bandcamp.com/album/12-key-jam-track-modulation-workouts-circle-of-fifths-practice-series-6",
+    coverUrl: "images/album-covers/modulation-workout.png",
+    spotifyUrl: "https://open.spotify.com/artist/3KeabuK2JtljSMRhYlcVBc",
+    appleMusicUrl: "https://music.apple.com/us/artist/jjj-b/1586552449",
+    tracks: [
+      "12-Key Minor Modulation Jazz Fusion Workout - Slow [80 BPM]",
+      "12-Key Minor Modulation Jazz Fusion Workout - Medium [100 BPM]",
+      "12-Key Minor Modulation Jazz Fusion Workout - Fast [120 BPM]",
+      "12-Key Major Modulation Jazz Fusion Workout - Slow [80 BPM]",
+      "12-Key Major Modulation Jazz Fusion Workout - Medium [100 BPM]",
+      "12-Key Major Modulation Jazz Fusion Workout - Fast [120 BPM]"
+    ]
+  },
+  {
     id: "1375316590",
     title: "Gloomy Vapor",
     year: "2025",
