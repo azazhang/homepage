@@ -86,6 +86,14 @@ document.addEventListener("DOMContentLoaded", () => {
     drawFretboard();
     buildLeadSheet();
     updateUI();
+    
+    // Trigger fade-in animations with a staggered delay for a premium feel
+    const fadeElements = document.querySelectorAll(".fade-in");
+    fadeElements.forEach((el, index) => {
+        setTimeout(() => {
+            el.classList.add("visible");
+        }, index * 80);
+    });
 });
 
 // Mobile Nav Toggle
