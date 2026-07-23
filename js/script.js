@@ -160,19 +160,20 @@ function initBackgroundCanvas() {
   if (pathTeal) pathTeal.setAttribute('d', generateWavePath(55, 2.0, 2000, 6000));
   if (pathPink) pathPink.setAttribute('d', generateWavePath(100, 4.0, 2000, 6000));
 
-  // Parallax handling with CSS variables
+  // Parallax handling with smooth Lerp
+  let targetMouseX = 0;
+  let targetMouseY = 0;
+  let currentMouseX = 0;
+  let currentMouseY = 0;
+
   window.addEventListener('mousemove', (e) => {
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
     const moveX = (e.clientX - centerX) / centerX;
     const moveY = (e.clientY - centerY) / centerY;
     
-    // Smooth translation offsets
-    const tx = -moveX * 40;
-    const ty = -moveY * 30;
-    
-    bg.style.setProperty('--mouse-x', `${tx}px`);
-    bg.style.setProperty('--mouse-y', `${ty}px`);
+    targetMouseX = -moveX * 40;
+    targetMouseY = -moveY * 30;
   });
 
   // IntersectionObserver to pause the infinite animations when offscreen
@@ -180,16 +181,33 @@ function initBackgroundCanvas() {
   let isConsoleVisible = false;
   let isPaused = false;
   let isIdle = false;
-  let intervalId = null;
+  let rafId = null;
 
   let offsetPurple = 0;
   let offsetTeal = -2000;
   let offsetPink = 0;
 
-  function updateOffsets() {
+  // Cache wave flow elements to update transforms directly
+  const flowPurple = document.querySelector('.wave-container.purple .wave-flow');
+  const flowTeal = document.querySelector('.wave-container.teal .wave-flow');
+  const flowPink = document.querySelector('.wave-container.pink .wave-flow');
+
+  function updateLoop() {
+    if (isPaused || isIdle) return;
+
+    // 1. Lerp Parallax
+    currentMouseX += (targetMouseX - currentMouseX) * 0.1;
+    currentMouseY += (targetMouseY - currentMouseY) * 0.1;
+    
+    // Only update style if parallax changed noticeably
+    if (Math.abs(targetMouseX - currentMouseX) > 0.01 || Math.abs(targetMouseY - currentMouseY) > 0.01) {
+      bg.style.setProperty('--mouse-x', `${currentMouseX.toFixed(2)}px`);
+      bg.style.setProperty('--mouse-y', `${currentMouseY.toFixed(2)}px`);
+    }
+
+    // 2. Update Wave Offsets
     const speedMultiplier = 0.3 + (knobState.speed * 2.0); // 0.3 to 2.3
 
-    // Update positions based on direction and speed mapping
     offsetPurple -= 0.8 * speedMultiplier;
     if (offsetPurple <= -2000) offsetPurple += 2000;
 
@@ -199,22 +217,24 @@ function initBackgroundCanvas() {
     offsetPink -= 0.6 * speedMultiplier;
     if (offsetPink <= -2000) offsetPink += 2000;
 
-    bg.style.setProperty('--wave-offset-purple', `${offsetPurple.toFixed(1)}px`);
-    bg.style.setProperty('--wave-offset-teal', `${offsetTeal.toFixed(1)}px`);
-    bg.style.setProperty('--wave-offset-pink', `${offsetPink.toFixed(1)}px`);
+    // Apply transforms directly to elements rather than CSS variables to avoid style thrashing
+    if (flowPurple) flowPurple.style.transform = `translate3d(${offsetPurple.toFixed(1)}px, 0, 0)`;
+    if (flowTeal) flowTeal.style.transform = `translate3d(${offsetTeal.toFixed(1)}px, 0, 0)`;
+    if (flowPink) flowPink.style.transform = `translate3d(${offsetPink.toFixed(1)}px, 0, 0)`;
+
+    rafId = requestAnimationFrame(updateLoop);
   }
 
   function startLoop() {
-    if (!intervalId && !isPaused && !isIdle) {
-      // Run at exactly 30 FPS (33ms interval) to completely decouple from browser 120Hz RAF scheduling
-      intervalId = setInterval(updateOffsets, 33);
+    if (!rafId && !isPaused && !isIdle) {
+      rafId = requestAnimationFrame(updateLoop);
     }
   }
 
   function stopLoop() {
-    if (intervalId) {
-      clearInterval(intervalId);
-      intervalId = null;
+    if (rafId) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
     }
   }
 
@@ -726,6 +746,7 @@ function startScreenVisualizer() {
   }));
 
   let animating = false;
+  let lastActiveLevel = -1; // Keep track of active level to avoid DOM thrashing
 
   function animate() {
     if (!animating) return; // Exit loop completely
@@ -764,14 +785,18 @@ function startScreenVisualizer() {
     // Map to active levels (0 to 6)
     const activeLevel = Math.min(6, Math.floor(heightPercent * 10));
 
-    vuLeds.forEach(led => {
-      const level = parseInt(led.getAttribute('data-level') || '1');
-      if (level <= activeLevel) {
-        led.classList.add('active');
-      } else {
-        led.classList.remove('active');
-      }
-    });
+    // Only update the DOM if the active level has changed (prevents layout thrashing)
+    if (activeLevel !== lastActiveLevel) {
+      vuLeds.forEach(led => {
+        const level = parseInt(led.getAttribute('data-level') || '1');
+        if (level <= activeLevel) {
+          led.classList.add('active');
+        } else {
+          led.classList.remove('active');
+        }
+      });
+      lastActiveLevel = activeLevel;
+    }
 
     requestAnimationFrame(animate);
   }
