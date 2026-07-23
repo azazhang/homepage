@@ -413,7 +413,10 @@ function fixImagePath(path) {
   if (!path) return '';
   if (path.startsWith('http://') || path.startsWith('https://')) return path;
   
-  const isSubdir = window.location.pathname.includes('/music/') || window.location.pathname.includes('/contact/');
+  const isSubdir = window.location.pathname.includes('/music/') || 
+                   window.location.pathname.includes('/contact/') || 
+                   window.location.pathname.includes('/tools/') || 
+                   window.location.pathname.includes('/workout/');
   if (isSubdir) {
     if (path.startsWith('../')) return path;
     return '../' + path;

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free open-source audio plugins & music production tools by JJJ_B, including Super Velocity Curve (per-pad MIDI velocity curves for finger drummers) and Random for Logic.">
+    <meta name="keywords" content="Super Velocity Curve, MIDI plugin, velocity curves, finger drumming, AU plugin, VST3, CLAP plugin, JUCE, Logic Pro Scripter, azazhang, JJJ_B, electronic music tools">
+    <meta name="author" content="JJJ_B">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://azhang.eu.org/tools/">
+    <meta property="og:title" content="Music Tools & Plugins | Super Velocity Curve & Audio Utilities | JJJ_B">
+    <meta property="og:description" content="Free open-source audio plugins & music tools for finger drummers and producers. Featuring Super Velocity Curve and Logic Pro utilities.">
+    <meta property="og:image" content="../images/head_portrait_new.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://azhang.eu.org/tools/">
+    <meta property="twitter:title" content="Music Tools & Plugins | JJJ_B">
+    <meta property="twitter:description" content="Free open-source audio plugins & music tools for finger drummers and producers. Featuring Super Velocity Curve.">
+    <meta property="twitter:image" content="../images/head_portrait_new.png">
+    
+    <title>Music Tools & Plugins - Super Velocity Curve | JJJ_B</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="../css/style.css?v=2">
+    <!-- Tools Page Specific CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../images/head_portrait_new.png">
+</head>
+<body class="light-theme tools-page">
+    
+    <!-- ===== DYNAMIC BACKGROUND ELEMENTS ===== -->
+    <div id="wave-background">
+        <div id="wave-parallax">
+            <div class="wave-container purple">
+                <div class="wave-flow flow-left">
+                    <svg class="wave-svg" viewBox="0 0 6000 600" preserveAspectRatio="none">
+                        <path class="wave-path" id="wave-path-purple" fill="none"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="wave-container teal">
+                <div class="wave-flow flow-right">
+                    <svg class="wave-svg" viewBox="0 0 6000 600" preserveAspectRatio="none">
+                        <path class="wave-path" id="wave-path-teal" fill="none"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="wave-container pink">
+                <div class="wave-flow flow-left">
+                    <svg class="wave-svg" viewBox="0 0 6000 600" preserveAspectRatio="none">
+                        <path class="wave-path" id="wave-path-pink" fill="none"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="ambient-glow glow-3"></div>
+
+    <!-- ===== HEADER & NAVIGATION ===== -->
+    <header class="header">
+        <nav class="nav container">
+            <a href="/" class="logo">JJJ_B</a>
+            
+            <ul class="nav-links">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/workout/" class="nav-link">Workout</a></li>
+                <li><a href="/tools/" class="nav-link active">Tools</a></li>
+                <li><a href="/music/" class="nav-link">Music</a></li>
+                <li><a href="/contact/" class="nav-link">Contact</a></li>
+            </ul>
+            
+            <button class="mobile-menu-toggle" aria-label="Toggle mobile menu">
+                <span class="hamburger"></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="container tools-container">
+        
+        <!-- Header Info -->
+        <div class="tools-header fade-in">
+            <span class="tools-badge">🛠️ Open Source Hardware & Software Tools</span>
+            <h1 class="tools-title">Music Tools & Plugins</h1>
+            <p class="tools-desc">Custom audio plugins, MIDI processors, and workflow utilities engineered for finger drummers, electronic producers, and live keyboardists.</p>
+        </div>
+
+        <!-- Headline Feature Showcase: Super Velocity Curve -->
+        <div class="featured-tool-card fade-in" id="super-velocity-curve">
+            <div class="featured-tool-grid">
+                <!-- Left: Product Details & Downloads -->
+                <div class="featured-tool-info">
+                    <span class="status-tag">🟢 Free & Open Source · Beta Release</span>
+                    <h2 class="featured-tool-name">Super Velocity Curve</h2>
+                    <span class="featured-tool-subtitle">Per-Pad MIDI Velocity Curves for Finger Drummers & Controllers</span>
+                    
+                    <p class="featured-tool-body">
+                        When your DAW's single global velocity curve isn't enough. <strong>Super Velocity Curve</strong> is a dedicated audio plugin and standalone app that lets you set independent velocity dynamics, response curves, floor/ceiling thresholds, and note remapping for every individual pad or MIDI key.
+                    </p>
+
+                    <!-- Feature Bullet Points -->
+                    <div class="feature-bullets">
+                        <div class="bullet-item">
+                            <span class="bullet-icon">🎯</span>
+                            <div class="bullet-text">
+                                <strong>Per-Pad Curves</strong>
+                                <span>Linear, exponential, log & floor/ceiling gates per note</span>
+                            </div>
+                        </div>
+                        <div class="bullet-item">
+                            <span class="bullet-icon">🎛️</span>
+                            <div class="bullet-text">
+                                <strong>Controller Profiles</strong>
+                                <span>Launchpad, Maschine, Yamaha FGDP, SPD-SX, GM</span>
+                            </div>
+                        </div>
+                        <div class="bullet-item">
+                            <span class="bullet-icon">🧙</span>
+                            <div class="bullet-text">
+                                <strong>Calibration Wizard</strong>
+                                <span>Hit histograms & interactive playing dynamic analysis</span>
+                            </div>
+                        </div>
+                        <div class="bullet-item">
+                            <span class="bullet-icon">🔌</span>
+                            <div class="bullet-text">
+                                <strong>Universal Formats</strong>
+                                <span>VST3, AU, CLAP & Standalone (macOS & Windows)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Downloads & Links -->
+                    <div class="download-actions">
+                        <a href="https://github.com/azazhang/SuperVelocityCurve/releases/latest/download/SuperVelocityCurve-macOS-unsigned.zip" class="btn-download mac" target="_blank" rel="noopener">
+                            <span>🍏</span> Download macOS (ZIP)
+                        </a>
+                        <a href="https://github.com/azazhang/SuperVelocityCurve/releases/latest/download/SuperVelocityCurve-Windows-unsigned.zip" class="btn-download win" target="_blank" rel="noopener">
+                            <span>🪟</span> Download Windows (ZIP)
+                        </a>
+                        <a href="https://github.com/azazhang/SuperVelocityCurve" class="btn-download github" target="_blank" rel="noopener">
+                            <span>💻</span> GitHub Repository
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right: YouTube Video Walkthrough -->
+                <div class="video-preview-wrapper">
+                    <iframe src="https://www.youtube.com/embed/4KFOZPDS3r8" title="Super Velocity Curve - Intro & Overview" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- Secondary Utilities Section -->
+        <div class="secondary-tools-section fade-in">
+            <span class="section-subtitle-badge">COMPANION UTILITIES & SCRIPTS</span>
+            <h2 class="section-title">More Audio Projects</h2>
+            <p class="section-desc">Smaller scripts and workflow presets built to solve specific production problems.</p>
+
+            <div class="tools-grid">
+                <!-- Card: Random for Logic -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <span class="tool-card-tag">🎹 Logic Pro Scripter</span>
+                        <h3 class="tool-card-title">Random for Logic</h3>
+                        <p class="tool-card-desc">
+                            A custom Logic Pro Scripter preset that mimics Ableton Live's popular Random MIDI effect. Introduce controlled probability, pitch randomness, and humanized velocity variation into your Logic Pro X MIDI processing chain.
+                        </p>
+                    </div>
+                    <div class="tool-card-footer">
+                        <a href="https://github.com/azazhang/Random-for-logic" class="btn btn-secondary" target="_blank" rel="noopener">
+                            <span>💻</span> View on GitHub →
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card: Support / Open Source Contribution -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <span class="tool-card-tag">☕ Community & Support</span>
+                        <h3 class="tool-card-title">Support Open Source Development</h3>
+                        <p class="tool-card-desc">
+                            All plugins and tools are free and open source under the MIT License. If Super Velocity Curve or these utilities help your performance or teaching, consider supporting future development!
+                        </p>
+                    </div>
+                    <div class="tool-card-footer">
+                        <a href="https://buymeacoffee.com/azhang" class="btn btn-primary" target="_blank" rel="noopener">
+                            <span>☕</span> Buy Me a Coffee →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer section">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3 class="footer-logo">JJJ_B</h3>
+                    <p class="footer-tagline">Independent electronic & ambient composition.</p>
+                </div>
+                
+                <div class="footer-nav">
+                    <h4>Explore</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/workout/">Workout App</a></li>
+                        <li><a href="/tools/">Tools & Plugins</a></li>
+                        <li><a href="/music/">Music</a></li>
+                        <li><a href="/contact/">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-platforms">
+                    <h4>Stream / Support</h4>
+                    <ul>
+                        <li><a href="https://open.spotify.com/artist/3KeabuK2JtljSMRhYlcVBc" target="_blank" rel="noopener">Spotify</a></li>
+                        <li><a href="https://jjjb.bandcamp.com/" target="_blank" rel="noopener">Bandcamp</a></li>
+                        <li><a href="https://music.apple.com/us/artist/jjj-b/1586552449" target="_blank" rel="noopener">Apple Music</a></li>
+                        <li><a href="https://www.youtube.com/@JJJB" target="_blank" rel="noopener">YouTube</a></li>
+                        <li><a href="https://www.instagram.com/az.azhang/" target="_blank" rel="noopener">Instagram</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-contact">
+                    <h4>Direct Connection</h4>
+                    <p>Inquiries / Collabs:</p>
+                    <a href="mailto:contact@azhang.eu.org" class="footer-email">contact@azhang.eu.org</a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 JJJ_B. All rights reserved. Produced by azazhang.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script src="../js/music-data.js"></script>
+    <script src="../js/script.js?v=3"></script>
+</body>
+</html>
